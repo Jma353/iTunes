@@ -1,7 +1,11 @@
+package media;
+
+import org.apache.http.client.utils.URIBuilder;
+
 /**
- * Movie media request meta-data class
+ * Movie media request class
  */
-public class Movie {
+public class Movie extends Media {
 
   /* Type of movie entity */
   public enum Entity {
@@ -64,20 +68,44 @@ public class Movie {
   }
 
   /**
-   * Checks to see if this Movie instance specifies an entity
+   * Checks to see if this media.Movie instance specifies an entity
    * @return - boolean
    */
-  public boolean hasEntity () {
+  private boolean hasEntity () {
     return this.entity != null;
   }
 
   /**
-   * Checks to see if this Movie instance specifies an attribute
+   * Checks to see if this media.Movie instance specifies an attribute
    * @return - boolean
    */
-  public boolean hasAttribute () {
+  private boolean hasAttribute () {
     return this.attribute != null;
   }
 
+  /**
+   * Entity getter
+   * @return - Entity
+   */
+  private Entity getEntity() {
+    return entity;
+  }
+
+  /**
+   * Attribute getter
+   * @return - Attribute
+   */
+  private Attribute getAttribute() {
+    return attribute;
+  }
+
+  /**
+   * @see Media#uriBuilder(URIBuilder builder)
+   */
+  public URIBuilder uriBuilder (URIBuilder builder) {
+    if (hasEntity()) { builder.addParameter("entity", getEntity().name()); }
+    if (hasAttribute()) { builder.addParameter("attribute", getAttribute().name()); }
+    return builder;
+  }
 
 }
