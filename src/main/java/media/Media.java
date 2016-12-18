@@ -7,18 +7,11 @@ import org.apache.http.client.utils.URIBuilder;
  * E - Entity specific to the media type
  * A - Attribute specific to the media type
  */
-public abstract class Media <E, A> {
+public abstract class Media <E extends Enum, A extends Enum> {
 
   /* Fields */
   protected E entity;
   protected A attribute;
-
-  /**
-   * Returns a URIBuilder with added parameters corresponding to
-   * the meta-data stored in this instance of Media
-   * @return - URIBuilder
-   */
-  public abstract URIBuilder uriBuilder (URIBuilder builder);
 
   /**
    * Constructor specifying both entity & attribute
@@ -69,5 +62,15 @@ public abstract class Media <E, A> {
     return attribute;
   }
 
+  /**
+   * Returns a URIBuilder with added parameters corresponding to
+   * the meta-data stored in this instance of Media
+   * @return - URIBuilder
+   */
+  public URIBuilder uriBuilder (URIBuilder builder) {
+    if (hasEntity()) { builder.addParameter("entity", getEntity().name()); }
+    if (hasAttribute()) { builder.addParameter("attribute", getAttribute().name()); }
+    return builder;
+  }
 
 }

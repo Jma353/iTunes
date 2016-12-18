@@ -1,7 +1,5 @@
 package media;
 
-import org.apache.http.client.utils.URIBuilder;
-
 /**
  * Music media request class
  */
@@ -27,14 +25,5 @@ public class Music extends Media <Music.Entity, Music.Attribute> {
     ratingIndex,
     songTerm
   }
-
-  /**
-   * @see Media#uriBuilder(URIBuilder builder)
-   */
-  public URIBuilder uriBuilder (URIBuilder builder) {
-    // TODO - Add attributes
-    return builder;
-  }
-
 
 }
