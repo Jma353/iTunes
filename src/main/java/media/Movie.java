@@ -5,7 +5,7 @@ import org.apache.http.client.utils.URIBuilder;
 /**
  * Movie media request class
  */
-public class Movie extends Media {
+public class Movie extends Media <Movie.Entity, Movie.Attribute> {
 
   /* Type of movie entity */
   public enum Entity {
@@ -28,75 +28,6 @@ public class Movie extends Media {
     movieTerm,
     ratingIndex,
     descriptionTerm
-  }
-
-  /* Fields */
-  private Entity entity;
-  private Attribute attribute;
-
-  /**
-   * Constructor specifying both entity & attribute
-   * @param entity - Entity
-   * @param attribute - Attribute
-   */
-  public Movie (Entity entity, Attribute attribute) {
-    this.entity = entity;
-    this.attribute = attribute;
-  }
-
-  /**
-   * Constructor specifying entity
-   * @param entity - Entity
-   */
-  public Movie (Entity entity) {
-    this (entity, null);
-  }
-
-  /**
-   * Constructor specifying attribute
-   * @param attribute - Attribute
-   */
-  public Movie (Attribute attribute) {
-    this (null, attribute);
-  }
-
-  /**
-   * Blank constructor
-   */
-  public Movie () {
-    this (null, null);
-  }
-
-  /**
-   * Checks to see if this media.Movie instance specifies an entity
-   * @return - boolean
-   */
-  private boolean hasEntity () {
-    return this.entity != null;
-  }
-
-  /**
-   * Checks to see if this media.Movie instance specifies an attribute
-   * @return - boolean
-   */
-  private boolean hasAttribute () {
-    return this.attribute != null;
-  }
-
-  /**
-   * Entity getter
-   * @return - Entity
-   */
-  private Entity getEntity() {
-    return entity;
-  }
-
-  /**
-   * Attribute getter
-   * @return - Attribute
-   */
-  private Attribute getAttribute() {
-    return attribute;
   }
 
   /**
