@@ -28,4 +28,20 @@ public class Movie extends Media <Movie.Entity, Movie.Attribute> {
     descriptionTerm
   }
 
+  /** Constructor 1 **/
+  public Movie (Movie.Entity e, Movie.Attribute a) {
+    super ("movie", e, a);
+  }
+
+  /** Constructor 2 **/
+  public Movie (Movie.Entity e) {
+    super ("movie", e);
+  }
+
+  /** Constructor 3 **/
+  public Movie () {
+    super ("movie");
+  }
+
+
 }

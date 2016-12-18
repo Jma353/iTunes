@@ -26,4 +26,20 @@ public class Music extends Media <Music.Entity, Music.Attribute> {
     songTerm
   }
 
+  /** Constructor 1 **/
+  public Music (Music.Entity e, Music.Attribute a) {
+    super ("music", e, a);
+  }
+
+  /** Constructor 2 **/
+  public Music (Music.Entity e) {
+    super ("music", e);
+  }
+
+  /** Constructor 3 **/
+  public Music () {
+    super ("music");
+  }
+
+
 }

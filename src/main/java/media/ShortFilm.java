@@ -20,4 +20,20 @@ public class ShortFilm extends Media <ShortFilm.Entity, ShortFilm.Attribute> {
     descriptionTerm
   }
 
+  /** Constructor 1 **/
+  public ShortFilm (ShortFilm.Entity e, ShortFilm.Attribute a) {
+    super ("shortFilm", e, a);
+  }
+
+  /** Constructor 2 **/
+  public ShortFilm (ShortFilm.Entity e) {
+    super ("shortFilm", e);
+  }
+
+  /** Constructor 3 **/
+  public ShortFilm () {
+    super ("shortFilm");
+  }
+
+
 }

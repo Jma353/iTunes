@@ -19,4 +19,20 @@ public class AudioBook extends Media <AudioBook.Entity, AudioBook.Attribute> {
     ratingIndex
   }
 
+  /** Constructor 1 **/
+  public AudioBook (AudioBook.Entity e, AudioBook.Attribute a) {
+    super ("audiobook", e, a);
+  }
+
+  /** Constructor 2 **/
+  public AudioBook (AudioBook.Entity e) {
+    super ("audiobook", e);
+  }
+
+  /** Constructor 3 **/
+  public AudioBook () {
+    super ("audiobook");
+  }
+
+
 }

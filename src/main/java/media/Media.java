@@ -10,6 +10,7 @@ import org.apache.http.client.utils.URIBuilder;
 public abstract class Media <E extends Enum, A extends Enum> {
 
   /* Fields */
+  protected String name;
   protected E entity;
   protected A attribute;
 
@@ -18,16 +19,25 @@ public abstract class Media <E extends Enum, A extends Enum> {
    * @param entity - E
    * @param attribute - A
    */
-  public Media (E entity, A attribute) {
+  public Media (String name, E entity, A attribute) {
+    this.name = name;
     this.entity = entity;
     this.attribute = attribute;
   }
 
   /**
+   * Constructor specifying only entity
+   * @param entity - E
+   */
+  public Media (String name, E entity) {
+    this (name, entity, null);
+  }
+
+  /**
    * Blank constructor
    */
-  public Media () {
-    this (null, null);
+  public Media (String name) {
+    this (name, null, null);
   }
 
   /**
@@ -45,6 +55,12 @@ public abstract class Media <E extends Enum, A extends Enum> {
   protected boolean hasAttribute () {
     return this.attribute != null;
   }
+
+  /**
+   * Name getter
+   * @return - String
+   */
+  protected String getName () { return name; }
 
   /**
    * Entity getter
@@ -68,6 +84,7 @@ public abstract class Media <E extends Enum, A extends Enum> {
    * @return - URIBuilder
    */
   public URIBuilder uriBuilder (URIBuilder builder) {
+    builder.addParameter("media", getName());
     if (hasEntity()) { builder.addParameter("entity", getEntity().name()); }
     if (hasAttribute()) { builder.addParameter("attribute", getAttribute().name()); }
     return builder;

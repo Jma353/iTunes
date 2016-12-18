@@ -1,7 +1,8 @@
+import media.Media;
+import media.Podcast;
 import org.apache.http.client.utils.URIBuilder;
-
-import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
@@ -13,7 +14,11 @@ import java.util.Locale;
 public class iTunes extends HTTP {
 
   /* Exception specific to iTunes driver */
-  public class iTunesException extends Exception {}
+  public class iTunesException extends Exception {
+    public iTunesException (String s) {
+      super (s);
+    }
+  }
 
   /* Singleton logic */
   private static iTunes instance = null;
@@ -72,13 +77,27 @@ public class iTunes extends HTTP {
   }
 
   /**
+   * Returns ISO country code if it's correct, else throws an iTunesException
+   * @param iso - String
+   * @return - ISO String
+   * @throws iTunesException
+   */
+  public String soundISO (String iso) throws iTunesException {
+    if (getCountryISOs().contains(iso)) {
+      return iso;
+    } else {
+      throw new iTunesException("ISO not found");
+    }
+  }
+
+  /**
    * Search by term
    * @param term - String
    */
   public void search (String term) {
     try {
       URIBuilder uriBuilder = searchURIBuilderBase();
-      uriBuilder.addParameter("term", term);
+      uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
       get(uriBuilder.build());
     } catch (Exception e) {
       e.printStackTrace();
@@ -89,16 +108,40 @@ public class iTunes extends HTTP {
    * Search by term & country ISO code
    * @param term - String
    * @param iso - String
-   * @throws iTunesException
    */
-  public void search (String term,
-                      String iso) throws iTunesException {
-    // TODO
+  public void search (String term, String iso) {
+    try {
+      URIBuilder uriBuilder = searchURIBuilderBase();
+      uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
+      uriBuilder.addParameter("country", soundISO(iso));
+      get(uriBuilder.build());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Search by term & media
+   * @param term - String
+   * @param m - Media
+   */
+  public void search (String term, Media m) {
+    try {
+      URIBuilder uriBuilder = searchURIBuilderBase();
+      uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
+      uriBuilder = m.uriBuilder(uriBuilder);
+      get(uriBuilder.build());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /* Hand-tests */
   public static void main (String[] args) {
-    iTunes.getInstance().search("lol");
+
+    iTunes.getInstance().search("programming throwdown",
+      new Podcast(Podcast.Entity.podcast));
+
   }
 
 }

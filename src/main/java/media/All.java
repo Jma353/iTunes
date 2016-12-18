@@ -48,4 +48,20 @@ public class All extends Media <All.Entity, All.Attribute> {
     albumTerm
   }
 
+  /** Constructor 1 **/
+  public All (All.Entity e, All.Attribute a) {
+    super ("all", e, a);
+  }
+
+  /** Constructor 2 **/
+  public All (All.Entity e) {
+    super ("all", e);
+  }
+
+  /** Constructor 3 **/
+  public All () {
+    super ("all");
+  }
+
+
 }
