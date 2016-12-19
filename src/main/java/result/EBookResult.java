@@ -1,6 +1,9 @@
 package result;
 
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -12,8 +15,8 @@ public class EBookResult extends Result {
 
   /* Fields */
   private long trackId;
-  private String name;
-  private String description;
+  private String trackName;
+  private String descriptionLong;
   private String artistName;
   private String trackViewUrl;
   private String country;
@@ -29,30 +32,15 @@ public class EBookResult extends Result {
    * Constructor from JsonNode
    * @param json - JsonNode
    */
-  public EBookResult (JsonNode json) {
-    this.trackId = json.get("trackId").getLongValue();
-    this.name = json.get("trackName").getTextValue();
-    this.description = json.get("longDescription").getTextValue();
-    this.artistName = json.get("artistName").getTextValue();
-    this.trackViewUrl = json.get("trackViewUrl").getTextValue();
-    this.country = json.get("country").getTextValue();
-    this.artworkUrl30 = json.get("artworkUrl30").getTextValue();
-    this.artworkUrl60 = json.get("artworkUrl60").getTextValue();
-    this.artworkUrl100 = json.get("artworkUrl100").getTextValue();
-    this.releaseDate = dateFromString(json.get("releaseDate").getTextValue());
-    this.price = json.get("price").getDoubleValue();
-    this.fileSizeBytes = json.get("fileSizeBytes").getLongValue();
-    Iterator<JsonNode> it = json.get("genres").getElements();
-    this.genres = new ArrayList<String>();
-    while (it.hasNext()) {
-      this.genres.add(it.next().getTextValue());
-    }
+  public static EBookResult fromJson (JsonNode json) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    return mapper.readValue(json.toString(), EBookResult.class);
   }
 
   /* Getters */
   public long getTrackId () { return trackId; }
-  public String getName () { return name; }
-  public String getDescription () { return description; }
+  public String getTrackName () { return trackName; }
+  public String getDescriptionLong () { return descriptionLong; }
   public String getArtistName () { return artistName; }
   public String getTrackViewUrl () { return trackViewUrl; }
   public String getCountry () { return country; }
