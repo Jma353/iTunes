@@ -31,9 +31,14 @@ public class MusicResult extends Result {
    * Constructor from JsonNode
    * @param json - JsonNode
    */
-  public MusicResult fromJson (JsonNode json) throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.readValue(json.toString(), MusicResult.class);
+  public static MusicResult fromJson (JsonNode json) {
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(json.toString(), MusicResult.class);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   /* Getters */

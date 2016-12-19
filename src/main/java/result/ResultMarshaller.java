@@ -16,8 +16,18 @@ public class ResultMarshaller {
    * @return - Result
    */
   public static Result marshall (JsonNode resultJSON) {
-    // TODO
-    return null;
+    Result result;
+    switch (resultJSON.get("kind").getTextValue()) {
+      case "music-video":
+        result = MusicVideoResult.fromJson(resultJSON);
+        break;
+      case "song":
+        result = MusicResult.fromJson(resultJSON);
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid result JSON");
+    }
+    return result;
   }
 
   /**

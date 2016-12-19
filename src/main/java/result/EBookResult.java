@@ -32,9 +32,14 @@ public class EBookResult extends Result {
    * Constructor from JsonNode
    * @param json - JsonNode
    */
-  public static EBookResult fromJson (JsonNode json) throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.readValue(json.toString(), EBookResult.class);
+  public static EBookResult fromJson (JsonNode json) {
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(json.toString(), EBookResult.class);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   /* Getters */

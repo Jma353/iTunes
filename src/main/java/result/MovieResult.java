@@ -2,7 +2,6 @@ package result;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-
 import java.io.IOException;
 import java.util.Date;
 
@@ -32,9 +31,14 @@ public class MovieResult extends Result {
    * Constructor from JsonNode
    * @param json - JsonNode
    */
-  public static MovieResult fromJson (JsonNode json) throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.readValue(json.toString(), MovieResult.class);
+  public static MovieResult fromJson (JsonNode json) {
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(json.toString(), MovieResult.class);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   /* Getters */
@@ -53,7 +57,5 @@ public class MovieResult extends Result {
   public double getCollectionPrice () { return collectionPrice; }
   public double getCollectionHdPrice() { return collectionHdPrice; }
   public long getTrackTimeMillis() { return trackTimeMillis; }
-
-
 
 }

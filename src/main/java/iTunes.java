@@ -1,7 +1,10 @@
 import media.Media;
+import media.Music;
 import media.Podcast;
 import org.apache.http.client.utils.URIBuilder;
 import org.codehaus.jackson.JsonNode;
+import result.ResultMarshaller;
+
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -102,6 +105,7 @@ public class iTunes extends HTTP {
       uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
       JsonNode result = get(uriBuilder.build());
       System.out.println(result);
+      ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -119,6 +123,7 @@ public class iTunes extends HTTP {
       uriBuilder.addParameter("country", soundISO(iso));
       JsonNode result = get(uriBuilder.build());
       System.out.println(result);
+      ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -136,6 +141,7 @@ public class iTunes extends HTTP {
       uriBuilder = m.uriBuilder(uriBuilder);
       JsonNode result = get(uriBuilder.build());
       System.out.println(result);
+      ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -143,8 +149,7 @@ public class iTunes extends HTTP {
 
   /* Hand-tests */
   public static void main (String[] args) {
-    iTunes.getInstance().search("serial",
-      new Podcast(Podcast.Entity.podcast));
+    iTunes.getInstance().search("hello", new Music());
   }
 
 }
