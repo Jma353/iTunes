@@ -65,7 +65,7 @@ public class PodcastThread extends Thread {
 
   /* Hand-testing */
   public static void main (String[] args) {
-    PodcastThread lol = new PodcastThread("http://feeds.feedburner.com/ProgrammingThrowdown");
+    PodcastThread lol = new PodcastThread("https://www.npr.org/rss/podcast.php?id=381444908");
     lol.run();
   }
 

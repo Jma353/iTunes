@@ -30,11 +30,11 @@ public class PodcastResult extends Result {
     this.link = XPathUtils.firstByName(channel, "link");
     this.language = XPathUtils.firstByName(channel, "language");
     this.subtitle = XPathUtils.firstByName(channel, "itunes:subtitle");
-    this.author = XPathUtils.firstByName(channel, "itunes:summary");
+    this.author = XPathUtils.firstByName(channel, "itunes:author");
     this.summary = XPathUtils.firstByName(channel, "itunes:summary");
     this.description = XPathUtils.firstByName(channel, "description");
     this.imageURL = XPathUtils.firstByAttr(channel, "itunes:image/@href");
-    this.category = XPathUtils.firstByName(channel, "media:category");
+    this.category = XPathUtils.firstByName(channel, "itunes:category");
     this.keywords = XPathUtils.firstByName(channel, "itunes:keywords").split(",");
   }
 

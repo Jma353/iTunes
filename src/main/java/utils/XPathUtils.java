@@ -12,7 +12,6 @@ public class XPathUtils {
   public static String firstByName (DomElement element, String name) {
     DomElement result = (DomElement) element.getFirstByXPath("./" + name);
     if (result == null) {
-      System.out.println("In here");
       return "";
     } else {
       return result.getTextContent();
