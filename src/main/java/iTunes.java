@@ -138,8 +138,7 @@ public class iTunes extends HTTP {
 
   /* Hand-tests */
   public static void main (String[] args) {
-
-    iTunes.getInstance().search("programming throwdown",
+    iTunes.getInstance().search("serial",
       new Podcast(Podcast.Entity.podcast));
 
   }
