@@ -3,7 +3,6 @@ package result;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import org.codehaus.jackson.map.ObjectMapper;
 import utils.XPathUtils;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,20 +54,6 @@ public class PodcastResult extends Result {
   public String getCategory () { return category; }
   public String[] getKeywords () { return keywords;}
 
-  /**
-   * JSON representation of this podcast
-   * @return - String
-   */
-  @Override
-  public String toString () {
-    try {
-      ObjectMapper mapper = new ObjectMapper();
-      return mapper.writeValueAsString(this);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return "";
-    }
-  }
 
   /**
    * Inner class describing a podcast episode result
@@ -122,21 +107,6 @@ public class PodcastResult extends Result {
     public String[] getKeywords () { return this.keywords; }
     public String getAudioURL () { return this.audioURL; }
     public Date getPubDate () { return this.pubDate; }
-
-    /**
-     * JSON representation of this podcast episode
-     * @return - String
-     */
-    @Override
-    public String toString () {
-      try {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(this);
-      } catch (Exception e) {
-        e.printStackTrace();
-        return "";
-      }
-    }
 
   }
 
