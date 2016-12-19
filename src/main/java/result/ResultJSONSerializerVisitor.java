@@ -33,4 +33,12 @@ public class ResultJSONSerializerVisitor {
     // TODO - define logic
   }
 
+  /**
+   * Visit PodcastResult.PodcastEpisodeResult
+   * @param pe - PodcastResult.PodcastEpisodeResult
+   */
+  public void visit (PodcastResult.PodcastEpisodeResult pe) {
+    // TODO - define logic
+  }
+
 }

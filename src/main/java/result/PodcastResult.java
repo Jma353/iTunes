@@ -7,7 +7,16 @@ import org.json.JSONObject;
  */
 public class PodcastResult extends Result {
 
-  // TODO - define data model
+  /* Fields */
+  private String title;
+  private String link;
+  private String language;
+  private String subtitle;
+  private String author;
+  private String summary;
+  private String description;
+  private String imageURL;
+
 
   /**
    * @see Result#asJson()
@@ -21,6 +30,31 @@ public class PodcastResult extends Result {
    */
   public void accept (ResultJSONSerializerVisitor visitor) {
     visitor.visit(this);
+  }
+
+
+
+
+
+
+
+  /**
+   * Inner class describing a podcast episode result
+   */
+  public class PodcastEpisodeResult extends Result {
+
+
+
+    /**
+     * @see Result#asJson()
+     */
+    public JSONObject asJson () { return null; }
+
+    /**
+     * @see Result#accept(ResultJSONSerializerVisitor)
+     */
+    public void accept (ResultJSONSerializerVisitor visitor) { visitor.visit(this); }
+
   }
 
 }

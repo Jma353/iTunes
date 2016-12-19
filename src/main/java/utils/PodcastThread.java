@@ -2,6 +2,7 @@ package utils;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomAttr;
+import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import java.util.List;
 
@@ -40,11 +41,20 @@ public class PodcastThread extends Thread {
     client.getOptions().setCssEnabled(false);
     client.getOptions().setJavaScriptEnabled(false);
     try {
+
+      /* Get the page */
       XmlPage page = client.getPage(getRssFeed());
+
+      /* Get the links (to the podcast episodes) */
       List<DomAttr> links = (List<DomAttr>) page.getByXPath("//enclosure/@url");
       for (DomAttr e : links) {
         System.out.println(e);
       }
+
+      /* Print series info */
+      DomElement node = (DomElement) page.getFirstByXPath("//channel");
+      System.out.println(node.getTextContent());
+
     } catch (Exception e) {
       e.printStackTrace();
     }
