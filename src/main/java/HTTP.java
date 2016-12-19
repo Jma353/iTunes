@@ -2,6 +2,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +19,7 @@ public abstract class HTTP {
    * Send a simple GET request
    * @param uri - URI
    */
-  protected void get (URI uri) throws IOException {
+  protected JsonNode get (URI uri) throws IOException {
 
     /* Client & request setup */
     HttpClient client = HttpClientBuilder.create().build();
@@ -41,9 +43,9 @@ public abstract class HTTP {
       result.append(line);
     }
 
-    /* Print result */
-    System.out.println(result);
-
+    /* Generate JSON response */
+    ObjectMapper mapper = new ObjectMapper();
+    return mapper.readTree(result.toString());
   }
 
 

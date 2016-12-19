@@ -1,6 +1,7 @@
 import media.Media;
 import media.Podcast;
 import org.apache.http.client.utils.URIBuilder;
+import org.codehaus.jackson.JsonNode;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -90,6 +91,7 @@ public class iTunes extends HTTP {
     }
   }
 
+
   /**
    * Search by term
    * @param term - String
@@ -98,7 +100,8 @@ public class iTunes extends HTTP {
     try {
       URIBuilder uriBuilder = searchURIBuilderBase();
       uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
-      get(uriBuilder.build());
+      JsonNode result = get(uriBuilder.build());
+      System.out.println(result);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -114,7 +117,8 @@ public class iTunes extends HTTP {
       URIBuilder uriBuilder = searchURIBuilderBase();
       uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
       uriBuilder.addParameter("country", soundISO(iso));
-      get(uriBuilder.build());
+      JsonNode result = get(uriBuilder.build());
+      System.out.println(result);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -130,7 +134,8 @@ public class iTunes extends HTTP {
       URIBuilder uriBuilder = searchURIBuilderBase();
       uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
       uriBuilder = m.uriBuilder(uriBuilder);
-      get(uriBuilder.build());
+      JsonNode result = get(uriBuilder.build());
+      System.out.println(result);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -140,7 +145,6 @@ public class iTunes extends HTTP {
   public static void main (String[] args) {
     iTunes.getInstance().search("serial",
       new Podcast(Podcast.Entity.podcast));
-
   }
 
 }
