@@ -4,6 +4,8 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
+import result.PodcastResult;
+
 import java.util.List;
 
 /**
@@ -52,8 +54,9 @@ public class PodcastThread extends Thread {
       }
 
       /* Print series info */
-      DomElement node = (DomElement) page.getFirstByXPath("//channel");
-      System.out.println(node.getTextContent());
+      DomElement channel = (DomElement) page.getFirstByXPath("//channel");
+      PodcastResult result = new PodcastResult(channel);
+      System.out.println(result);
 
     } catch (Exception e) {
       e.printStackTrace();
