@@ -43,20 +43,20 @@ public class PodcastThread extends Thread {
     client.getOptions().setCssEnabled(false);
     client.getOptions().setJavaScriptEnabled(false);
     try {
-
       /* Get the page */
       XmlPage page = client.getPage(getRssFeed());
-
-      /* Get the links (to the podcast episodes) */
-      List<DomAttr> links = (List<DomAttr>) page.getByXPath("//enclosure/@url");
-      for (DomAttr e : links) {
-        System.out.println(e);
-      }
 
       /* Print series info */
       DomElement channel = (DomElement) page.getFirstByXPath("//channel");
       PodcastResult result = new PodcastResult(channel);
       System.out.println(result);
+
+      /* Print episode info */
+      List<DomElement> items = (List<DomElement>) page.getByXPath("//item");
+      for (DomElement it : items) {
+        PodcastResult.PodcastEpisodeResult ep = new PodcastResult.PodcastEpisodeResult(it);
+        System.out.println(ep);
+      }
 
     } catch (Exception e) {
       e.printStackTrace();

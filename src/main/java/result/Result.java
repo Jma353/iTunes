@@ -1,6 +1,5 @@
 package result;
 
-
 /**
  * Result of querying iTunes
  */
