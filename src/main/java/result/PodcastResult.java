@@ -5,11 +5,8 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HTMLParser;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import utils.XPathUtils;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -35,31 +32,10 @@ public class PodcastResult extends Result {
   private PodcastEpisodeResult[] episodeResults;
 
   /**
-   * PodcastResult from channel DomElement
-   * @param channel - DomElement
-   */
-  public PodcastResult (DomElement channel) {
-    /* Fill all fields */
-    this.title = XPathUtils.firstByName(channel, "title");
-    this.language = XPathUtils.firstByName(channel, "language");
-    this.author = XPathUtils.firstByName(channel, "author");
-    this.description = XPathUtils.firstByName(channel, "description");
-    this.imageURL = XPathUtils.firstByAttr(channel, "image/@href");
-    this.category = XPathUtils.firstByName(channel, "category");
-    this.keywords = XPathUtils.firstByName(channel, "keywords").split(",");
-    /* Episode children */
-    List<DomElement> items = (List<DomElement>) channel.getByXPath("./item");
-    this.episodeResults = new PodcastEpisodeResult[items.size()];
-    for (int i = 0; i < items.size(); i++) {
-      this.episodeResults[i] = new PodcastEpisodeResult(items.get(i));
-    }
-  }
-
-  /**
    * PodcastResult from JsonNode
    * @param json - JsonNode
    */
-  public static PodcastResult fromJson (JsonNode json) {
+  public PodcastResult (JsonNode json) {
     try {
       URL src = new URL(json.get("feedUrl").getTextValue());
       URLConnection srcConn = src.openConnection();
@@ -78,13 +54,41 @@ public class PodcastResult extends Result {
       client.getOptions().setJavaScriptEnabled(false);
       HtmlPage page = HTMLParser.parseHtml(response, client.getCurrentWindow());
       DomElement channel = (DomElement) page.getFirstByXPath("//channel");
-      PodcastResult result = new PodcastResult(channel);
-      return new PodcastResult (channel);
+      setValues(channel);
     } catch (Exception e) {
+      setValues(null);
       System.out.println(json.get("feedUrl").getTextValue());
       System.out.println(e.getMessage());
-      return null;
     }
+  }
+
+  /**
+   * Bulk-set values
+   * @param channel - DomElement
+   */
+  public void setValues (DomElement channel) {
+
+    /* Fill all fields */
+    this.title = channel != null ? XPathUtils.firstByName(channel, "title") : "";
+    this.language = channel != null ? XPathUtils.firstByName(channel, "language") : "";
+    this.author = channel != null ? XPathUtils.firstByName(channel, "author") : "";
+    this.description = channel != null ? XPathUtils.firstByName(channel, "description") : "";
+    this.imageURL = channel != null ? XPathUtils.firstByAttr(channel, "image/@href") : "";
+    this.category = channel != null ? XPathUtils.firstByName(channel, "category") : "";
+    this.keywords =
+      channel != null ? XPathUtils.firstByName(channel, "keywords").split(",") : new String[0];
+
+    /* Episode children */
+    if (channel != null) {
+      List<DomElement> items = (List<DomElement>) channel.getByXPath("./item");
+      this.episodeResults = new PodcastEpisodeResult[items.size()];
+      for (int i = 0; i < items.size(); i++) {
+        this.episodeResults[i] = new PodcastEpisodeResult(items.get(i));
+      }
+    } else {
+      this.episodeResults = new PodcastEpisodeResult[0];
+    }
+
   }
 
   /** Getters **/

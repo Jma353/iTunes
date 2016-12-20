@@ -28,7 +28,7 @@ public class ResultMarshaller {
         result = new MovieResult (resultJSON);
         break;
       case "podcast":
-        result = PodcastResult.fromJson (resultJSON);
+        result = new PodcastResult (resultJSON);
         break;
       case "song":
         result = new MusicResult (resultJSON);
