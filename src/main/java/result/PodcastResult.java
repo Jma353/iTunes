@@ -1,6 +1,9 @@
 package result;
 
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.xml.XmlPage;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import utils.XPathUtils;
 import java.text.DateFormat;
@@ -47,6 +50,25 @@ public class PodcastResult extends Result {
     this.episodeResults = new PodcastEpisodeResult[items.size()];
     for (int i = 0; i < items.size(); i++) {
       this.episodeResults[i] = new PodcastEpisodeResult(items.get(i));
+    }
+  }
+
+  /**
+   * PodcastResult from JsonNode
+   * @param json - JsonNode
+   */
+  public static PodcastResult fromJson (JsonNode json) {
+    try {
+      WebClient client = new WebClient();
+      client.getOptions().setCssEnabled(false);
+      client.getOptions().setJavaScriptEnabled(false);
+      XmlPage page = client.getPage(json.get("feedUrl").getTextValue());
+      DomElement channel = (DomElement) page.getFirstByXPath("//channel");
+      PodcastResult result = new PodcastResult(channel);
+      return new PodcastResult (channel);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
     }
   }
 
