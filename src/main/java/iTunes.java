@@ -1,9 +1,9 @@
 import media.Media;
-import media.Music;
 import media.MusicVideo;
 import media.Podcast;
 import org.apache.http.client.utils.URIBuilder;
 import org.codehaus.jackson.JsonNode;
+import result.Result;
 import result.ResultMarshaller;
 
 import java.net.URISyntaxException;
@@ -82,6 +82,16 @@ public class iTunes extends HTTP {
   }
 
   /**
+   * Add limit info to URI builder
+   * @param builder - URIBuilder
+   * @return - URIBuilder
+   */
+  public URIBuilder addLimit (URIBuilder builder, Integer limit) {
+    builder.addParameter("limit", limit.toString());
+    return builder;
+  }
+
+  /**
    * Returns ISO country code if it's correct, else throws an iTunesException
    * @param iso - String
    * @return - ISO String
@@ -95,61 +105,65 @@ public class iTunes extends HTTP {
     }
   }
 
-  /**
-   * Search by term
-   * @param term - String
-   */
-  public void search (String term) {
+  /** Search by term **/
+  public Result[] search (String term) {
     try {
       URIBuilder uriBuilder = searchURIBuilderBase();
       uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
       JsonNode result = get(uriBuilder.build());
-      System.out.println(result);
-      ResultMarshaller.marshallAll(result);
+      return ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
       e.printStackTrace();
+      return new Result[0];
     }
   }
 
-  /**
-   * Search by term & country ISO code
-   * @param term - String
-   * @param iso - String
-   */
-  public void search (String term, String iso) {
+  /** Search by term & country ISO **/
+  public Result[] search (String term, String iso) {
     try {
       URIBuilder uriBuilder = searchURIBuilderBase();
       uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
       uriBuilder.addParameter("country", soundISO(iso));
       JsonNode result = get(uriBuilder.build());
-      System.out.println(result);
-      ResultMarshaller.marshallAll(result);
+      return ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
       e.printStackTrace();
+      return new Result[0];
     }
   }
 
-  /**
-   * Search by term & media
-   * @param term - String
-   * @param m - Media
-   */
-  public void search (String term, Media m) {
+  /** Search by term & media type (w/entity & attribute as optional values too) **/
+  public Result[] search (String term, Media m) {
     try {
       URIBuilder uriBuilder = searchURIBuilderBase();
       uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
       uriBuilder = m.uriBuilder(uriBuilder);
       JsonNode result = get(uriBuilder.build());
-      System.out.println(result);
-      ResultMarshaller.marshallAll(result);
+      return ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
       e.printStackTrace();
+      return new Result[0];
+    }
+  }
+
+  /** Search by term & media type (w/entity & attribute as optional values too) **/
+  public Result[] search (String term, Media m, Integer limit) {
+    try {
+      URIBuilder uriBuilder = searchURIBuilderBase();
+      uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
+      uriBuilder = m.uriBuilder(uriBuilder);
+      uriBuilder = addLimit(uriBuilder, limit);
+      JsonNode result = get(uriBuilder.build());
+      return ResultMarshaller.marshallAll(result);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return new Result[0];
     }
   }
 
   /* Hand-tests */
   public static void main (String[] args) {
-    iTunes.getInstance().search("hello", new MusicVideo());
+    Result[] results = iTunes.getInstance().search("hello", new Podcast(), 25);
   }
 
 }
