@@ -1,11 +1,19 @@
 package result;
 
+import com.gargoylesoftware.htmlunit.StringWebResponse;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.HTMLParser;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import utils.XPathUtils;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,11 +26,8 @@ public class PodcastResult extends Result {
 
   /* Fields */
   private String title;
-  private String link;
   private String language;
-  private String subtitle;
   private String author;
-  private String summary;
   private String description;
   private String imageURL;
   private String category;
@@ -36,15 +41,12 @@ public class PodcastResult extends Result {
   public PodcastResult (DomElement channel) {
     /* Fill all fields */
     this.title = XPathUtils.firstByName(channel, "title");
-    this.link = XPathUtils.firstByName(channel, "link");
     this.language = XPathUtils.firstByName(channel, "language");
-    this.subtitle = XPathUtils.firstByName(channel, "itunes:subtitle");
-    this.author = XPathUtils.firstByName(channel, "itunes:author");
-    this.summary = XPathUtils.firstByName(channel, "itunes:summary");
+    this.author = XPathUtils.firstByName(channel, "author");
     this.description = XPathUtils.firstByName(channel, "description");
-    this.imageURL = XPathUtils.firstByAttr(channel, "itunes:image/@href");
-    this.category = XPathUtils.firstByName(channel, "itunes:category");
-    this.keywords = XPathUtils.firstByName(channel, "itunes:keywords").split(",");
+    this.imageURL = XPathUtils.firstByAttr(channel, "image/@href");
+    this.category = XPathUtils.firstByName(channel, "category");
+    this.keywords = XPathUtils.firstByName(channel, "keywords").split(",");
     /* Episode children */
     List<DomElement> items = (List<DomElement>) channel.getByXPath("./item");
     this.episodeResults = new PodcastEpisodeResult[items.size()];
@@ -59,26 +61,36 @@ public class PodcastResult extends Result {
    */
   public static PodcastResult fromJson (JsonNode json) {
     try {
+      URL src = new URL(json.get("feedUrl").getTextValue());
+      URLConnection srcConn = src.openConnection();
+      BufferedReader in =
+        new BufferedReader(new InputStreamReader(srcConn.getInputStream(), "UTF-8"));
+      String inputLine;
+      StringBuilder builder = new StringBuilder();
+      while ((inputLine = in.readLine()) != null)
+        builder.append(inputLine);
+      in.close();
+      String xString = builder.toString();
+      xString = xString.replaceAll("[^\\x20-\\x7e\\x0A]", "");
+      StringWebResponse response = new StringWebResponse(xString, src);
       WebClient client = new WebClient();
       client.getOptions().setCssEnabled(false);
       client.getOptions().setJavaScriptEnabled(false);
-      XmlPage page = client.getPage(json.get("feedUrl").getTextValue());
+      HtmlPage page = HTMLParser.parseHtml(response, client.getCurrentWindow());
       DomElement channel = (DomElement) page.getFirstByXPath("//channel");
       PodcastResult result = new PodcastResult(channel);
       return new PodcastResult (channel);
     } catch (Exception e) {
-      e.printStackTrace();
+      System.out.println(json.get("feedUrl").getTextValue());
+      System.out.println(e.getMessage());
       return null;
     }
   }
 
   /** Getters **/
   public String getTitle () { return title; }
-  public String getLink () { return link; }
   public String getLanguage () { return language; }
-  public String getSubtitle () { return subtitle; }
   public String getAuthor () { return author; }
-  public String getSummary () { return summary; }
   public String getDescription () { return description; }
   public String getImageURL () { return imageURL; }
   public String getCategory () { return category; }
@@ -108,12 +120,12 @@ public class PodcastResult extends Result {
     public PodcastEpisodeResult (DomElement item) {
       /* Non-date fields */
       this.title = XPathUtils.firstByName(item, "title");
-      this.author = XPathUtils.firstByName(item, "itunes:author");
-      this.subtitle = XPathUtils.firstByName(item, "itunes:subtitle");
-      this.summary = XPathUtils.firstByName(item, "itunes:summary");
-      this.imageURL = XPathUtils.firstByAttr(item, "itunes:image/@href");
-      this.duration = XPathUtils.firstByName(item, "itunes:duration");
-      this.keywords = XPathUtils.firstByName(item, "itunes:keywords").split(",");
+      this.author = XPathUtils.firstByName(item, "author");
+      this.subtitle = XPathUtils.firstByName(item, "subtitle");
+      this.summary = XPathUtils.firstByName(item, "summary");
+      this.imageURL = XPathUtils.firstByAttr(item, "image/@href");
+      this.duration = XPathUtils.firstByName(item, "duration");
+      this.keywords = XPathUtils.firstByName(item, "keywords").split(",");
       this.audioURL = XPathUtils.firstByAttr(item, "enclosure/@url");
       /* Date processing */
       DateFormat df = new SimpleDateFormat("d MMM yyyy");

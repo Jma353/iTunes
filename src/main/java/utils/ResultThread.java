@@ -29,7 +29,6 @@ public class ResultThread extends Thread {
 
   /** Run, create result & increment filled **/
   public void run () {
-    System.out.println("Starting...");
     results[i] = ResultMarshaller.marshall(json);
     System.out.println(results[i]);
     /* If we're done */

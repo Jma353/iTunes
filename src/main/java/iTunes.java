@@ -163,7 +163,7 @@ public class iTunes extends HTTP {
 
   /* Hand-tests */
   public static void main (String[] args) {
-    Result[] results = iTunes.getInstance().search("hello", new Podcast(), 25);
+    Result[] results = iTunes.getInstance().search("programming", new Podcast());
   }
 
 }
