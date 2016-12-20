@@ -95,7 +95,7 @@ public class iTunes extends HTTP {
    * Returns ISO country code if it's correct, else throws an iTunesException
    * @param iso - String
    * @return - ISO String
-   * @throws iTunesException
+   * @throws iTunesException - Custom exception
    */
   public String soundISO (String iso) throws iTunesException {
     if (getCountryISOs().contains(iso)) {
@@ -105,60 +105,50 @@ public class iTunes extends HTTP {
     }
   }
 
-  /** Search by term **/
-  public Result[] search (String term) {
+  /** The God search function **/
+  public Result[] search (String term, String iso, Media m, Integer limit) {
     try {
       URIBuilder uriBuilder = searchURIBuilderBase();
       uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
+      if (iso != null) { uriBuilder.addParameter("country", soundISO(iso)); }
+      if (m != null) { uriBuilder = m.uriBuilder(uriBuilder); }
+      if (limit != null) { uriBuilder = addLimit(uriBuilder, limit); }
       JsonNode result = get(uriBuilder.build());
       return ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
       e.printStackTrace();
       return new Result[0];
     }
+  }
+
+  /** Search by term **/
+  public Result[] search (String term) {
+    return search (term, null, null, null);
   }
 
   /** Search by term & country ISO **/
   public Result[] search (String term, String iso) {
-    try {
-      URIBuilder uriBuilder = searchURIBuilderBase();
-      uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
-      uriBuilder.addParameter("country", soundISO(iso));
-      JsonNode result = get(uriBuilder.build());
-      return ResultMarshaller.marshallAll(result);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return new Result[0];
-    }
+    return search (term, iso, null, null);
   }
 
-  /** Search by term & media type (w/entity & attribute as optional values too) **/
+  /** Search by term, country ISO, & media type **/
+  public Result[] search (String term, String iso, Media m) {
+    return search (term, iso, m, null);
+  }
+
+  /** Search by term & media type **/
   public Result[] search (String term, Media m) {
-    try {
-      URIBuilder uriBuilder = searchURIBuilderBase();
-      uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
-      uriBuilder = m.uriBuilder(uriBuilder);
-      JsonNode result = get(uriBuilder.build());
-      return ResultMarshaller.marshallAll(result);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return new Result[0];
-    }
+    return search (term, null, m, null);
   }
 
-  /** Search by term & media type (w/entity & attribute as optional values too) **/
+  /** Search by term, with a specified limit **/
+  public Result[] search (String term, Integer limit) {
+    return search (term, null, null, limit);
+  }
+
+  /** Search by term & media, with a specified limit **/
   public Result[] search (String term, Media m, Integer limit) {
-    try {
-      URIBuilder uriBuilder = searchURIBuilderBase();
-      uriBuilder.addParameter("term", URLEncoder.encode(term, "UTF-8"));
-      uriBuilder = m.uriBuilder(uriBuilder);
-      uriBuilder = addLimit(uriBuilder, limit);
-      JsonNode result = get(uriBuilder.build());
-      return ResultMarshaller.marshallAll(result);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return new Result[0];
-    }
+    return search (term, null, m, limit);
   }
 
   /* Hand-tests */
