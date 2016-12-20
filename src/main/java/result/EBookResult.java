@@ -14,47 +14,15 @@ import java.util.Iterator;
 public class EBookResult extends Result {
 
   /* Fields */
-  private long trackId;
-  private String trackName;
-  private String descriptionLong;
-  private String artistName;
-  private String trackViewUrl;
-  private String country;
-  private String artworkUrl30;
-  private String artworkUrl60;
-  private String artworkUrl100;
-  private Date releaseDate;
-  private double price;
-  private long fileSizeBytes;
-  private ArrayList<String> genres;
+  private JsonNode json;
 
   /**
-   * Constructor from JsonNode
+   * Constructor from JSON
    * @param json - JsonNode
    */
-  public static EBookResult fromJson (JsonNode json) {
-    try {
-      ObjectMapper mapper = new ObjectMapper();
-      return mapper.readValue(json.toString(), EBookResult.class);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
+  public EBookResult (JsonNode json) {
+    this.json = json;
   }
 
-  /* Getters */
-  public long getTrackId () { return trackId; }
-  public String getTrackName () { return trackName; }
-  public String getDescriptionLong () { return descriptionLong; }
-  public String getArtistName () { return artistName; }
-  public String getTrackViewUrl () { return trackViewUrl; }
-  public String getCountry () { return country; }
-  public String getArtworkUrl30 () { return artworkUrl30; }
-  public String getArtworkUrl60 () { return artworkUrl60; }
-  public String getArtworkUrl100 () { return artworkUrl100; }
-  public Date getReleaseDate () { return releaseDate; }
-  public double getPrice () { return price; }
-  public long getFileSizeBytes () { return fileSizeBytes; }
-  public ArrayList<String> getGenres () { return genres; }
 
 }

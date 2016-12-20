@@ -19,10 +19,10 @@ public class ResultMarshaller {
     Result result;
     switch (resultJSON.get("kind").getTextValue()) {
       case "music-video":
-        result = MusicVideoResult.fromJson(resultJSON);
+        result = new MusicVideoResult (resultJSON);
         break;
       case "song":
-        result = MusicResult.fromJson(resultJSON);
+        result = new MusicResult (resultJSON);
         break;
       default:
         throw new IllegalArgumentException("Invalid result JSON");

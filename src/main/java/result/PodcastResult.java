@@ -6,6 +6,7 @@ import utils.XPathUtils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * iTunes podcast result
@@ -23,6 +24,7 @@ public class PodcastResult extends Result {
   private String imageURL;
   private String category;
   private String[] keywords;
+  private PodcastEpisodeResult[] episodeResults;
 
   /**
    * PodcastResult from channel DomElement
@@ -40,20 +42,26 @@ public class PodcastResult extends Result {
     this.imageURL = XPathUtils.firstByAttr(channel, "itunes:image/@href");
     this.category = XPathUtils.firstByName(channel, "itunes:category");
     this.keywords = XPathUtils.firstByName(channel, "itunes:keywords").split(",");
+    /* Episode children */
+    List<DomElement> items = (List<DomElement>) channel.getByXPath("./item");
+    this.episodeResults = new PodcastEpisodeResult[items.size()];
+    for (int i = 0; i < items.size(); i++) {
+      this.episodeResults[i] = new PodcastEpisodeResult(items.get(i));
+    }
   }
 
   /** Getters **/
   public String getTitle () { return title; }
-  public String getLink () { return link;}
+  public String getLink () { return link; }
   public String getLanguage () { return language; }
-  public String getSubtitle () { return subtitle;}
+  public String getSubtitle () { return subtitle; }
   public String getAuthor () { return author; }
   public String getSummary () { return summary; }
-  public String getDescription () { return description;}
-  public String getImageURL () { return imageURL;}
+  public String getDescription () { return description; }
+  public String getImageURL () { return imageURL; }
   public String getCategory () { return category; }
-  public String[] getKeywords () { return keywords;}
-
+  public String[] getKeywords () { return keywords; }
+  public PodcastEpisodeResult[] getEpisodeResults () { return episodeResults; }
 
   /**
    * Inner class describing a podcast episode result

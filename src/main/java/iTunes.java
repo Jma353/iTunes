@@ -1,5 +1,6 @@
 import media.Media;
 import media.Music;
+import media.MusicVideo;
 import media.Podcast;
 import org.apache.http.client.utils.URIBuilder;
 import org.codehaus.jackson.JsonNode;
@@ -94,7 +95,6 @@ public class iTunes extends HTTP {
     }
   }
 
-
   /**
    * Search by term
    * @param term - String
@@ -149,7 +149,7 @@ public class iTunes extends HTTP {
 
   /* Hand-tests */
   public static void main (String[] args) {
-    iTunes.getInstance().search("hello", new Music());
+    iTunes.getInstance().search("hello", new MusicVideo());
   }
 
 }
