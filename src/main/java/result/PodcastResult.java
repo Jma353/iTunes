@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import lombok.Getter;
 
 /**
  * iTunes podcast result
@@ -22,14 +23,14 @@ import java.util.List;
 public class PodcastResult extends Result {
 
   /* Fields */
-  private String title;
-  private String language;
-  private String author;
-  private String description;
-  private String imageURL;
-  private String category;
-  private String[] keywords;
-  private PodcastEpisodeResult[] episodeResults;
+  @Getter private String title;
+  @Getter private String language;
+  @Getter private String author;
+  @Getter private String description;
+  @Getter private String imageURL;
+  @Getter private String category;
+  @Getter private String[] keywords;
+  @Getter private PodcastEpisodeResult[] episodeResults;
 
   /**
    * PodcastResult from JsonNode
@@ -91,31 +92,21 @@ public class PodcastResult extends Result {
 
   }
 
-  /** Getters **/
-  public String getTitle () { return title; }
-  public String getLanguage () { return language; }
-  public String getAuthor () { return author; }
-  public String getDescription () { return description; }
-  public String getImageURL () { return imageURL; }
-  public String getCategory () { return category; }
-  public String[] getKeywords () { return keywords; }
-  public PodcastEpisodeResult[] getEpisodeResults () { return episodeResults; }
-
   /**
    * Inner class describing a podcast episode result
    */
   public static class PodcastEpisodeResult extends Result {
 
     /* Fields */
-    private String title;
-    private String author;
-    private String subtitle;
-    private String summary;
-    private String imageURL;
-    private String duration;
-    private String[] keywords;
-    private String audioURL;
-    private Date pubDate;
+    @Getter private String title;
+    @Getter private String author;
+    @Getter private String subtitle;
+    @Getter private String summary;
+    @Getter private String imageURL;
+    @Getter private String duration;
+    @Getter private String[] keywords;
+    @Getter private String audioURL;
+    @Getter private Date pubDate;
 
     /**
      * PodcastEpisodeResult from item DomElement
@@ -142,18 +133,6 @@ public class PodcastResult extends Result {
         this.pubDate = null;
       }
     }
-
-    /** Getters **/
-    public String getTitle () { return this.title; }
-    public String getAuthor () { return this.author; }
-    public String getSubtitle () { return this.subtitle; }
-    public String getSummary () { return this.summary; }
-    public String getImageURL () { return this.imageURL; }
-    public String getDuration () { return this.duration; }
-    public String[] getKeywords () { return this.keywords; }
-    public String getAudioURL () { return this.audioURL; }
-    public Date getPubDate () { return this.pubDate; }
-
   }
 
 }

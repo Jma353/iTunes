@@ -1,21 +1,16 @@
 package utils;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Mutable reference to an integer
  */
+@AllArgsConstructor
 public class IntHolder {
-  int i;
-
-  public IntHolder (int i) {
-    this.i = i;
-  }
+  @Getter int i;
 
   public void increment () {
     i++;
   }
-
-  public int getI () {
-    return i;
-  }
-
 }

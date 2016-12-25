@@ -1,23 +1,13 @@
 package result;
 
+import lombok.AllArgsConstructor;
 import org.codehaus.jackson.JsonNode;
 
 /**
  * iTunes audiobook result
  */
+@AllArgsConstructor
 public class AudioBookResult extends Result {
-
   /* Fields */
   private JsonNode json;
-
-  /**
-   * Constructor from JSON
-   * @param json - JsonNode
-   */
-  public AudioBookResult (JsonNode json) {
-    this.json = json;
-  }
-
-
-
 }

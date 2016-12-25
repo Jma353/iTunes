@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 
+import lombok.Getter;
+
 /**
  * Main class to handle making API Requests.
  * In the form of a singleton.
@@ -35,8 +37,8 @@ public class iTunes extends HTTP {
   }
 
   /* Fields */
-  private String baseURL;
-  private HashSet<String> countryISOs;
+  @Getter private String baseURL;
+  @Getter private HashSet<String> countryISOs;
 
   /**
    * Protected constructor (only used in singleton logic)
@@ -45,22 +47,6 @@ public class iTunes extends HTTP {
     this.baseURL = "https://itunes.apple.com";
     this.countryISOs =
       new HashSet<String> (Arrays.asList(Locale.getISOCountries()));
-  }
-
-  /**
-   * Base URL getter
-   * @return - String
-   */
-  private String getBaseURL() {
-    return baseURL;
-  }
-
-  /**
-   * Country ISO set getter
-   * @return - HashSet of String
-   */
-  private HashSet<String> getCountryISOs() {
-    return countryISOs;
   }
 
   /**

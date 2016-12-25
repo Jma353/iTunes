@@ -1,5 +1,7 @@
 package media;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.apache.http.client.utils.URIBuilder;
 
 /**
@@ -7,23 +9,13 @@ import org.apache.http.client.utils.URIBuilder;
  * E - Entity specific to the media type
  * A - Attribute specific to the media type
  */
+@AllArgsConstructor
 public abstract class Media <E extends Enum, A extends Enum> {
 
   /* Fields */
-  protected String name;
-  protected E entity;
-  protected A attribute;
-
-  /**
-   * Constructor specifying both entity & attribute
-   * @param entity - E
-   * @param attribute - A
-   */
-  public Media (String name, E entity, A attribute) {
-    this.name = name;
-    this.entity = entity;
-    this.attribute = attribute;
-  }
+  @Getter protected String name;
+  @Getter protected E entity;
+  @Getter protected A attribute;
 
   /**
    * Constructor specifying only entity
@@ -54,28 +46,6 @@ public abstract class Media <E extends Enum, A extends Enum> {
    */
   protected boolean hasAttribute () {
     return this.attribute != null;
-  }
-
-  /**
-   * Name getter
-   * @return - String
-   */
-  protected String getName () { return name; }
-
-  /**
-   * Entity getter
-   * @return - E
-   */
-  protected E getEntity() {
-    return entity;
-  }
-
-  /**
-   * Attribute getter
-   * @return - A
-   */
-  protected A getAttribute() {
-    return attribute;
   }
 
   /**

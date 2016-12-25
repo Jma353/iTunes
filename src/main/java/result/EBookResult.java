@@ -1,5 +1,6 @@
 package result;
 
+import lombok.AllArgsConstructor;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -11,18 +12,8 @@ import java.util.Iterator;
 /**
  * iTunes ebook result
  */
+@AllArgsConstructor
 public class EBookResult extends Result {
-
   /* Fields */
   private JsonNode json;
-
-  /**
-   * Constructor from JSON
-   * @param json - JsonNode
-   */
-  public EBookResult (JsonNode json) {
-    this.json = json;
-  }
-
-
 }

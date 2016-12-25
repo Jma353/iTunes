@@ -39,7 +39,4 @@ public abstract class Result {
       return null;
     }
   }
-
-
-
 }
