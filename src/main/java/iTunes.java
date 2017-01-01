@@ -137,11 +137,9 @@ public class iTunes extends HTTP {
     return search (term, null, m, limit);
   }
 
-  /*
   public static void main (String[] args) {
-    Result[] results = iTunes.getInstance().search("programming", new Podcast());
   }
-  */
+
 
 }
 

@@ -18,3 +18,9 @@ rest.iml
 
 # Env vars
 .env
+
+# Building
+out
+
+# Arbitrary
+.DS_Store
