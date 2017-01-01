@@ -59,6 +59,9 @@ public class All extends Media <All.Entity, All.Attribute> {
   }
 
   /** Constructor 3 **/
+  public All (All.Attribute a) { super ("all", null, a); }
+
+  /** Constructor 4 **/
   public All () {
     super ("all");
   }

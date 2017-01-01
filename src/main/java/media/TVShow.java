@@ -32,6 +32,9 @@ public class TVShow extends Media <TVShow.Entity, TVShow.Attribute> {
   }
 
   /** Constructor 3 **/
+  public TVShow (TVShow.Attribute a) { super ("tvShow", null, a); }
+
+  /** Constructor 4 **/
   public TVShow () {
     super ("tvShow");
   }

@@ -83,19 +83,4 @@ public class ResultMarshaller {
     }
   }
 
-  /** For synchronous marshalling **/
-  public static Result[] marshallAllSync (JsonNode responseJSON) {
-    /* Setup for dispatching threads */
-    int size = responseJSON.get("resultCount").getIntValue();
-    Result[] results = new Result[size];
-    Iterator<JsonNode> it = responseJSON.get("results").getElements();
-    int i = 0;
-    while (it.hasNext()) {
-      results[i] = marshall(it.next());
-      System.out.println(results[i]);
-      i++;
-    }
-    return results;
-  }
-
 }

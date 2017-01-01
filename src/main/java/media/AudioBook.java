@@ -30,6 +30,9 @@ public class AudioBook extends Media <AudioBook.Entity, AudioBook.Attribute> {
   }
 
   /** Constructor 3 **/
+  public AudioBook (AudioBook.Attribute a) { super ("audiobook", null, a); }
+
+  /** Constructor 4 **/
   public AudioBook () {
     super ("audiobook");
   }

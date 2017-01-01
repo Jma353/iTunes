@@ -39,6 +39,9 @@ public class Movie extends Media <Movie.Entity, Movie.Attribute> {
   }
 
   /** Constructor 3 **/
+  public Movie (Movie.Attribute a) { super ("movie", null, a); }
+
+  /** Constructor 4 **/
   public Movie () {
     super ("movie");
   }

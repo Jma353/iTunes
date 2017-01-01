@@ -31,6 +31,9 @@ public class MusicVideo extends Media <MusicVideo.Entity, MusicVideo.Attribute> 
   }
 
   /** Constructor 3 **/
+  public MusicVideo (MusicVideo.Attribute a) { super ("musicVideo", null, a); }
+
+  /** Constructor 4 **/
   public MusicVideo () {
     super ("musicVideo");
   }

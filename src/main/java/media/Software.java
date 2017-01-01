@@ -28,6 +28,9 @@ public class Software extends Media <Software.Entity, Software.Attribute> {
   }
 
   /** Constructor 3 **/
+  public Software (Software.Attribute a) { super ("software", null, a); }
+
+  /** Constructor 4 **/
   public Software () {
     super ("software");
   }

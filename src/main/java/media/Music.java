@@ -37,6 +37,9 @@ public class Music extends Media <Music.Entity, Music.Attribute> {
   }
 
   /** Constructor 3 **/
+  public Music (Music.Attribute a) { super ("music", null, a); }
+
+  /** Constructor 4 **/
   public Music () {
     super ("music");
   }

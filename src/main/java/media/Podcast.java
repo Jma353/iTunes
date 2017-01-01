@@ -34,6 +34,9 @@ public class Podcast extends Media <Podcast.Entity, Podcast.Attribute> {
   }
 
   /** Constructor 3 **/
+  public Podcast (Podcast.Attribute a) { super ("podcast", null, a); }
+
+  /** Constructor 4 **/
   public Podcast () {
     super ("podcast");
   }
