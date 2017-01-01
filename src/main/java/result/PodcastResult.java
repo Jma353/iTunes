@@ -13,7 +13,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
 
@@ -23,13 +25,13 @@ import lombok.Getter;
 public class PodcastResult extends Result {
 
   /* Fields */
+  @Getter private Long id;
   @Getter private String title;
-  @Getter private String language;
+  @Getter private String country;
   @Getter private String author;
   @Getter private String description;
   @Getter private String imageURL;
-  @Getter private String category;
-  @Getter private String[] keywords;
+  @Getter private String[] genres;
   @Getter private PodcastEpisodeResult[] episodeResults;
 
   /**
@@ -38,28 +40,36 @@ public class PodcastResult extends Result {
    */
   public PodcastResult (JsonNode json) {
     try {
+
+      /* Setup stream */
       URL src = new URL(json.get("feedUrl").getTextValue());
       URLConnection srcConn = src.openConnection();
       BufferedReader in =
         new BufferedReader(new InputStreamReader(srcConn.getInputStream(), "UTF-8"));
+
+      /* Build String from stream */
       String inputLine;
       StringBuilder builder = new StringBuilder();
       while ((inputLine = in.readLine()) != null)
         builder.append(inputLine);
       in.close();
       String xString = builder.toString();
+
+      /* Clean + process String */
       xString = xString.replaceAll("[^\\x20-\\x7e\\x0A]", "");
       StringWebResponse response = new StringWebResponse(xString, src);
       WebClient client = new WebClient();
       client.getOptions().setCssEnabled(false);
       client.getOptions().setJavaScriptEnabled(false);
+
+      /* Get HTML page + grab values */
       HtmlPage page = HTMLParser.parseHtml(response, client.getCurrentWindow());
       DomElement channel = (DomElement) page.getFirstByXPath("//channel");
-      setValues(channel);
-    } catch (Exception e) {
-      setValues(null);
-      System.out.println(json.get("feedUrl").getTextValue());
-      System.out.println(e.getMessage());
+      setValues(channel, json);
+    }
+    /**/
+    catch (Exception e) {
+      setValues(null, null);
     }
   }
 
@@ -67,17 +77,21 @@ public class PodcastResult extends Result {
    * Bulk-set values
    * @param channel - DomElement
    */
-  public void setValues (DomElement channel) {
+  public void setValues (DomElement channel, JsonNode json) {
 
     /* Fill all fields */
+    this.id = json != null ? json.get("collectionId").asLong() : -1;
     this.title = channel != null ? XPathUtils.firstByName(channel, "title") : "";
-    this.language = channel != null ? XPathUtils.firstByName(channel, "language") : "";
+    this.country = json != null ? json.get("country").asText() : "";
     this.author = channel != null ? XPathUtils.firstByName(channel, "author") : "";
     this.description = channel != null ? XPathUtils.firstByName(channel, "description") : "";
     this.imageURL = channel != null ? XPathUtils.firstByAttr(channel, "image/@href") : "";
-    this.category = channel != null ? XPathUtils.firstByName(channel, "category") : "";
-    this.keywords =
-      channel != null ? XPathUtils.firstByName(channel, "keywords").split(",") : new String[0];
+    ArrayList<String> genres = new ArrayList<String>();
+    if (json != null) {
+      Iterator<JsonNode> it = json.get("genres").iterator();
+      while (it.hasNext()) { genres.add(it.next().asText()); }
+    }
+    this.genres = genres.toArray(new String[genres.size()]);
 
     /* Episode children */
     if (channel != null) {
