@@ -74,7 +74,7 @@ public class ResultMarshaller {
       i++;
     }
 
-    /* Wait on the filling of this data-structure & return */
+    /* Wait on the filling of this data-structure + return */
     synchronized (results) {
       while (filled.getI() < size) {
         results.wait();

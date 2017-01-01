@@ -39,6 +39,7 @@ public class PodcastResult extends Result {
    * @param json - JsonNode
    */
   public PodcastResult (JsonNode json) {
+    this.json = json;
     try {
 
       /* Setup stream */

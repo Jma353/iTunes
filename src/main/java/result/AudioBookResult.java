@@ -8,6 +8,7 @@ import org.codehaus.jackson.JsonNode;
  */
 @AllArgsConstructor
 public class AudioBookResult extends Result {
-  /* Fields */
-  private JsonNode json;
+  public AudioBookResult (JsonNode json) {
+    this.json = json;
+  }
 }

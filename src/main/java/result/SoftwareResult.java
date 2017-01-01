@@ -8,7 +8,7 @@ import org.codehaus.jackson.JsonNode;
  */
 @AllArgsConstructor
 public class SoftwareResult extends Result {
-  /* Fields */
-  private JsonNode json;
-
+  public SoftwareResult (JsonNode json) {
+    this.json = json;
+  }
 }

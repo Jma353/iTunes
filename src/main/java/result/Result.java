@@ -1,5 +1,8 @@
 package result;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,6 +12,18 @@ import java.util.Date;
  * Result of querying iTunes
  */
 public abstract class Result {
+
+  /* Fields */
+  @Getter protected JsonNode json;
+
+  /** Default constructor **/
+  public Result () {
+  }
+
+  /** Constructor w/JSON **/
+  public Result (JsonNode json) {
+    this.json = json;
+  }
 
   /**
    * JSON representation of this podcast
@@ -39,4 +54,14 @@ public abstract class Result {
       return null;
     }
   }
+
+  /**
+   * Get a field from this result JSON
+   * @param s - String
+   * @return - JsonNode
+   */
+  public JsonNode getField (String s) {
+    return this.json.get(s);
+  }
+
 }

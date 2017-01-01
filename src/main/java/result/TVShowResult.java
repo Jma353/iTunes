@@ -8,6 +8,7 @@ import org.codehaus.jackson.JsonNode;
  */
 @AllArgsConstructor
 public class TVShowResult extends Result {
-  /* Fields */
-  private JsonNode json;
+  public TVShowResult (JsonNode json) {
+    this.json = json;
+  }
 }
