@@ -1,4 +1,4 @@
-package utils;
+package itunes.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

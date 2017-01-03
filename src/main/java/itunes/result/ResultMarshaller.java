@@ -1,20 +1,20 @@
-package result;
+package itunes.result;
 
 import org.codehaus.jackson.JsonNode;
-import utils.IntHolder;
-import utils.ResultThread;
+import itunes.utils.IntHolder;
+import itunes.utils.ResultThread;
 
 import java.util.Iterator;
 
 /**
  * Class utilized to instantiate results based on
- * the search / lookup response from the iTunes
+ * the search / lookup response from the itunes.iTunes
  * API
  */
 public class ResultMarshaller {
 
   /**
-   * Returns a single result, given a result JSON
+   * Returns a single itunes.result, given a itunes.result JSON
    * @param resultJSON - JsonNode
    * @return - Result
    */
@@ -49,13 +49,13 @@ public class ResultMarshaller {
         result = new EBookResult (resultJSON);
         break;
       default:
-        throw new IllegalArgumentException("Invalid result JSON");
+        throw new IllegalArgumentException("Invalid itunes.result JSON");
     }
     return result;
   }
 
   /**
-   * Returns a list of results, given the JSON response from iTunes
+   * Returns a list of results, given the JSON response from itunes.iTunes
    * @param responseJSON - JsonNode
    * @return - Result[]
    */

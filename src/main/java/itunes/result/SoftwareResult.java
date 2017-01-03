@@ -1,10 +1,10 @@
-package result;
+package itunes.result;
 
 import lombok.AllArgsConstructor;
 import org.codehaus.jackson.JsonNode;
 
 /**
- * iTunes software result
+ * itunes.iTunes software itunes.result
  */
 @AllArgsConstructor
 public class SoftwareResult extends Result {

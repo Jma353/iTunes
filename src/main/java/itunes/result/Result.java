@@ -1,6 +1,5 @@
-package result;
+package itunes.result;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -9,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Result of querying iTunes
+ * Result of querying itunes.iTunes
  */
 public abstract class Result {
 
@@ -41,7 +40,7 @@ public abstract class Result {
   }
 
   /**
-   * Date object from iTunes-formatted String
+   * Date object from itunes.iTunes-formatted String
    * @param s - String
    * @return - Date
    */
@@ -56,7 +55,7 @@ public abstract class Result {
   }
 
   /**
-   * Get a field from this result JSON
+   * Get a field from this itunes.result JSON
    * @param s - String
    * @return - JsonNode
    */

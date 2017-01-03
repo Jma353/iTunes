@@ -1,7 +1,7 @@
-package media;
+package itunes.media;
 
 /**
- * AudioBook media request class
+ * AudioBook itunes.media request class
  */
 public class AudioBook extends Media <AudioBook.Entity, AudioBook.Attribute> {
 

@@ -1,7 +1,7 @@
-package media;
+package itunes.media;
 
 /**
- * TVShow media request class
+ * TVShow itunes.media request class
  */
 public class TVShow extends Media <TVShow.Entity, TVShow.Attribute> {
 

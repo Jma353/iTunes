@@ -1,4 +1,4 @@
-package utils;
+package itunes.utils;
 
 import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.DomElement;

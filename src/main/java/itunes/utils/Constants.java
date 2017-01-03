@@ -1,4 +1,4 @@
-package utils;
+package itunes.utils;
 
 /**
  * Constants utilities class

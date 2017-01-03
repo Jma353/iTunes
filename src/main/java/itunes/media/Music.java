@@ -1,7 +1,7 @@
-package media;
+package itunes.media;
 
 /**
- * Music media request class
+ * Music itunes.media request class
  */
 public class Music extends Media <Music.Entity, Music.Attribute> {
 

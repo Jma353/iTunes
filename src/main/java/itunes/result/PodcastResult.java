@@ -1,4 +1,4 @@
-package result;
+package itunes.result;
 
 import com.gargoylesoftware.htmlunit.StringWebResponse;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -6,7 +6,7 @@ import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HTMLParser;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.codehaus.jackson.JsonNode;
-import utils.XPathUtils;
+import itunes.utils.XPathUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -20,7 +20,7 @@ import java.util.List;
 import lombok.Getter;
 
 /**
- * iTunes podcast result
+ * itunes.iTunes podcast itunes.result
  */
 public class PodcastResult extends Result {
 
@@ -108,7 +108,7 @@ public class PodcastResult extends Result {
   }
 
   /**
-   * Inner class describing a podcast episode result
+   * Inner class describing a podcast episode itunes.result
    */
   public static class PodcastEpisodeResult extends Result {
 

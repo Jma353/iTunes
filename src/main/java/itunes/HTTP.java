@@ -1,3 +1,5 @@
+package itunes;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -11,7 +13,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 
 /**
- * Abstract class defining HTTP methods
+ * Abstract class defining itunes.HTTP methods
  */
 public abstract class HTTP {
 
@@ -32,7 +34,7 @@ public abstract class HTTP {
     BufferedReader rd = new BufferedReader(
       new InputStreamReader(response.getEntity().getContent()));
 
-    /* Build result string */
+    /* Build itunes.result string */
     StringBuffer result = new StringBuffer();
     String line;
     while ((line = rd.readLine()) != null) {

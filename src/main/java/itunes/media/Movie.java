@@ -1,7 +1,7 @@
-package media;
+package itunes.media;
 
 /**
- * Movie media request class
+ * Movie itunes.media request class
  */
 public class Movie extends Media <Movie.Entity, Movie.Attribute> {
 

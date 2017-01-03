@@ -1,10 +1,10 @@
-import media.Media;
-import media.MusicVideo;
-import media.Podcast;
+package itunes;
+
+import itunes.media.Media;
 import org.apache.http.client.utils.URIBuilder;
 import org.codehaus.jackson.JsonNode;
-import result.Result;
-import result.ResultMarshaller;
+import itunes.result.Result;
+import itunes.result.ResultMarshaller;
 
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -20,7 +20,7 @@ import lombok.Getter;
  */
 public class iTunes extends HTTP {
 
-  /* Exception specific to iTunes driver */
+  /* Exception specific to itunes.iTunes driver */
   public class iTunesException extends Exception {
     public iTunesException (String s) {
       super (s);
@@ -117,12 +117,12 @@ public class iTunes extends HTTP {
     return search (term, iso, null, null);
   }
 
-  /** Search by term, country ISO, & media type **/
+  /** Search by term, country ISO, & itunes.media type **/
   public Result[] search (String term, String iso, Media m) {
     return search (term, iso, m, null);
   }
 
-  /** Search by term & media type **/
+  /** Search by term & itunes.media type **/
   public Result[] search (String term, Media m) {
     return search (term, null, m, null);
   }
@@ -132,7 +132,7 @@ public class iTunes extends HTTP {
     return search (term, null, null, limit);
   }
 
-  /** Search by term & media, with a specified limit **/
+  /** Search by term & itunes.media, with a specified limit **/
   public Result[] search (String term, Media m, Integer limit) {
     return search (term, null, m, limit);
   }

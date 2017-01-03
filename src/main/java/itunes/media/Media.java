@@ -1,4 +1,4 @@
-package media;
+package itunes.media;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,8 +6,8 @@ import org.apache.http.client.utils.URIBuilder;
 
 /**
  * Media parent (abstract)
- * E - Entity specific to the media type
- * A - Attribute specific to the media type
+ * E - Entity specific to the itunes.media type
+ * A - Attribute specific to the itunes.media type
  */
 @AllArgsConstructor
 public abstract class Media <E extends Enum, A extends Enum> {
@@ -54,7 +54,7 @@ public abstract class Media <E extends Enum, A extends Enum> {
    * @return - URIBuilder
    */
   public URIBuilder uriBuilder (URIBuilder builder) {
-    builder.addParameter("media", getName());
+    builder.addParameter("itunes/media", getName());
     if (hasEntity()) { builder.addParameter("entity", getEntity().name()); }
     if (hasAttribute()) { builder.addParameter("attribute", getAttribute().name()); }
     return builder;

@@ -1,7 +1,7 @@
-package media;
+package itunes.media;
 
 /**
- * Podcast media request class
+ * Podcast itunes.media request class
  */
 public class Podcast extends Media <Podcast.Entity, Podcast.Attribute> {
 

@@ -1,12 +1,12 @@
-package utils;
+package itunes.utils;
 
 import org.codehaus.jackson.JsonNode;
-import result.Result;
-import result.ResultMarshaller;
+import itunes.result.Result;
+import itunes.result.ResultMarshaller;
 
 /**
- * A thread utilized to create a result derived
- * from an iTunes Search API response
+ * A thread utilized to create a itunes.result derived
+ * from an itunes.iTunes Search API response
  */
 public class ResultThread extends Thread {
 
@@ -27,7 +27,7 @@ public class ResultThread extends Thread {
     this.size = size;
   }
 
-  /** Run, create result & increment filled **/
+  /** Run, create itunes.result & increment filled **/
   public void run () {
     results[i] = ResultMarshaller.marshall(json);
     System.out.println(results[i]);
