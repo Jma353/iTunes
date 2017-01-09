@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 
 import lombok.Getter;
@@ -88,6 +89,24 @@ public class iTunes extends HTTP {
       return iso;
     } else {
       throw new iTunesException("ISO not found");
+    }
+  }
+
+  /** The God lookup function **/
+  public Result[] lookup (List<String> ids) {
+    try {
+      URIBuilder uriBuilder = lookupURIBuilderBase();
+      StringBuilder builder = new StringBuilder();
+      for (int i = 0; i < ids.size(); i++) {
+        String addition = i == ids.size()-1 ? ids.get(i) : ids.get(i) + ",";
+        builder.append(addition);
+      }
+      uriBuilder.addParameter("id", URLEncoder.encode(builder.toString(), "UTF-8"));
+      JsonNode result = get(uriBuilder.build());
+      return ResultMarshaller.marshallAll(result);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return new Result[0];
     }
   }
 
