@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.cuappdev.backend.itunes</groupId>
-  <artifactId>itunes</artifactId>
-  <version>1.0</version>
+  <groupId>com.github.Jma353</groupId>
+  <artifactId>iTunes</artifactId>
+  <version>0.0.1</version>
 
   <build>
     <plugins>
@@ -20,7 +20,6 @@
       </plugin>
     </plugins>
   </build>
-
 
 
   <dependencies>
@@ -50,6 +49,13 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
 
 </project>
 
