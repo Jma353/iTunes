@@ -1,11 +1,15 @@
 package com.github.Jma353.itunes;
 
 import com.github.Jma353.itunes.media.Media;
+import com.github.Jma353.itunes.media.Podcast;
 import com.github.Jma353.itunes.result.Result;
 import org.apache.http.client.utils.URIBuilder;
 import org.codehaus.jackson.JsonNode;
 import com.github.Jma353.itunes.result.ResultMarshaller;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -159,10 +163,27 @@ public class iTunes extends HTTP {
 
   /* Hand tests / necessary for JAR */
   public static void main (String [] args) {
-
-
-
-
+    /*
+    BufferedWriter bw = null;
+    FileWriter fw = null;
+    try {
+      String currentDirectory = System.getProperty("user.dir");
+      fw = new FileWriter (currentDirectory + "/output.txt");
+      bw = new BufferedWriter (fw);
+      iTunes itunes = iTunes.getInstance();
+      Result[] results = itunes.search("programming", new Podcast(Podcast.Entity.podcast));
+      bw.write(results[1].toString());
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (bw != null) bw.close();
+        if (fw != null) fw.close();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
+    }
+    */
 
   }
 

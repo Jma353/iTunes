@@ -11,10 +11,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
@@ -59,6 +56,8 @@ public class PodcastResult extends Result {
       /* Clean + process String */
       xString = xString.replaceAll("[^\\x20-\\x7e\\x0A]", "");
       StringWebResponse response = new StringWebResponse(xString, src);
+
+      /* Prepare web client */
       WebClient client = new WebClient();
       client.getOptions().setCssEnabled(false);
       client.getOptions().setJavaScriptEnabled(false);
@@ -99,7 +98,9 @@ public class PodcastResult extends Result {
       List<DomElement> items = (List<DomElement>) channel.getByXPath("./item");
       this.episodeResults = new PodcastEpisodeResult[items.size()];
       for (int i = 0; i < items.size(); i++) {
-        this.episodeResults[i] = new PodcastEpisodeResult(items.get(i));
+        this.episodeResults[i] = new PodcastEpisodeResult(items.get(i),
+                                                          this.author,
+                                                          this.imageURL);
       }
     } else {
       this.episodeResults = new PodcastEpisodeResult[0];
@@ -121,32 +122,23 @@ public class PodcastResult extends Result {
     @Getter private String duration;
     @Getter private String[] keywords;
     @Getter private String audioURL;
-    @Getter private Date pubDate;
+    @Getter private String pubDate;
 
     /**
      * PodcastEpisodeResult from item DomElement
      * @param item - DomElement
      */
-    public PodcastEpisodeResult (DomElement item) {
+    public PodcastEpisodeResult (DomElement item, String author, String imageURL) {
       /* Non-date fields */
       this.title = XPathUtils.firstByName(item, "title");
-      this.author = XPathUtils.firstByName(item, "author");
       this.subtitle = XPathUtils.firstByName(item, "subtitle");
       this.summary = XPathUtils.firstByName(item, "summary");
-      this.imageURL = XPathUtils.firstByAttr(item, "image/@href");
       this.duration = XPathUtils.firstByName(item, "duration");
       this.keywords = XPathUtils.firstByName(item, "keywords").split(",");
       this.audioURL = XPathUtils.firstByAttr(item, "enclosure/@url");
-      /* Date processing */
-      DateFormat df = new SimpleDateFormat("d MMM yyyy");
-      String dateString = XPathUtils.firstByName(item, "pubDate");
-      int comma = dateString.indexOf(",") + 2;
-      dateString = dateString.substring(comma, comma + 11);
-      try {
-        this.pubDate = df.parse(dateString);
-      } catch (Exception e) {
-        this.pubDate = null;
-      }
+      this.pubDate = XPathUtils.firstByName(item, "pubDate");
+      this.author = author;
+      this.imageURL = imageURL;
     }
   }
 

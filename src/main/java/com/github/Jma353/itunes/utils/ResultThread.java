@@ -30,7 +30,7 @@ public class ResultThread extends Thread {
   /** Run, create itunes.result & increment filled **/
   public void run () {
     results[i] = ResultMarshaller.marshall(json);
-    System.out.println(results[i]);
+    // System.out.println(results[i]);
     /* If we're done */
     synchronized (results) {
       filled.increment();
