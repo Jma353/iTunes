@@ -11,7 +11,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
@@ -122,7 +125,11 @@ public class PodcastResult extends Result {
     @Getter private String duration;
     @Getter private String[] keywords;
     @Getter private String audioURL;
-    @Getter private String pubDate;
+    @Getter private Date pubDate;
+
+    /** Date formatter for episodes **/
+    private static SimpleDateFormat dateFormatter =
+      new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZZ");
 
     /**
      * PodcastEpisodeResult from item DomElement
@@ -136,10 +143,15 @@ public class PodcastResult extends Result {
       this.duration = XPathUtils.firstByName(item, "duration");
       this.keywords = XPathUtils.firstByName(item, "keywords").split(",");
       this.audioURL = XPathUtils.firstByAttr(item, "enclosure/@url");
-      this.pubDate = XPathUtils.firstByName(item, "pubDate");
       this.author = author;
       this.imageURL = imageURL;
+      try {
+        this.pubDate = PodcastEpisodeResult.dateFormatter.parse(
+          XPathUtils.firstByName(item, "pubDate"));
+      } catch (ParseException e) {
+        e.printStackTrace();
+        this.pubDate = null;
+      }
     }
   }
-
 }
