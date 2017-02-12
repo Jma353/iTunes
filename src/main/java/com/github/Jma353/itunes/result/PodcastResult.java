@@ -149,8 +149,7 @@ public class PodcastResult extends Result {
         this.pubDate = PodcastEpisodeResult.dateFormatter.parse(
           XPathUtils.firstByName(item, "pubDate"));
       } catch (ParseException e) {
-        e.printStackTrace();
-        this.pubDate = null;
+        this.pubDate = new Date();
       }
     }
   }
