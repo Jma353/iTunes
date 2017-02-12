@@ -105,7 +105,7 @@ public class iTunes extends HTTP {
         String addition = i == ids.size()-1 ? ids.get(i) : ids.get(i) + ",";
         builder.append(addition);
       }
-      uriBuilder.addParameter("id", URLEncoder.encode(builder.toString(), "UTF-8"));
+      uriBuilder.addParameter("id", builder.toString());
       JsonNode result = get(uriBuilder.build());
       return ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
@@ -171,7 +171,7 @@ public class iTunes extends HTTP {
       fw = new FileWriter (currentDirectory + "/output.txt");
       bw = new BufferedWriter (fw);
       iTunes itunes = iTunes.getInstance();
-      Result[] results = itunes.search("programming", new Podcast(Podcast.Entity.podcast));
+      Result[] results = itunes.lookup(Arrays.asList(new String[] {"394775318", "206527655", "1076599250"}));
       bw.write(results[1].toString());
     } catch (IOException e) {
       e.printStackTrace();
