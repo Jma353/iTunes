@@ -1,12 +1,10 @@
 package com.github.Jma353.itunes;
 
 import com.github.Jma353.itunes.media.Media;
-import com.github.Jma353.itunes.media.Podcast;
 import com.github.Jma353.itunes.result.Result;
 import org.apache.http.client.utils.URIBuilder;
 import org.codehaus.jackson.JsonNode;
 import com.github.Jma353.itunes.result.ResultMarshaller;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,7 +14,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-
 import lombok.Getter;
 
 /**
@@ -160,10 +157,12 @@ public class iTunes extends HTTP {
     return search (term, null, m, limit);
   }
 
-
-  /* Hand tests / necessary for JAR */
+  /* Necessary for JAR */
   public static void main (String [] args) {
-    /*
+    // handTest();
+  }
+
+  public static void handTest() {
     BufferedWriter bw = null;
     FileWriter fw = null;
     try {
@@ -172,7 +171,7 @@ public class iTunes extends HTTP {
       bw = new BufferedWriter (fw);
       iTunes itunes = iTunes.getInstance();
       Result[] results = itunes.lookup(Arrays.asList(new String[] {"394775318", "206527655", "1076599250"}));
-      bw.write(results[1].toString());
+      bw.write(results[0].toString());
     } catch (IOException e) {
       e.printStackTrace();
     } finally {
@@ -183,8 +182,6 @@ public class iTunes extends HTTP {
         ex.printStackTrace();
       }
     }
-    */
-
   }
 
 

@@ -11,17 +11,18 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * itunes.iTunes podcast itunes.result
  */
+@JsonIgnoreProperties(value = {"json"})
 public class PodcastResult extends Result {
 
   /* Fields */
@@ -70,8 +71,10 @@ public class PodcastResult extends Result {
       DomElement channel = (DomElement) page.getFirstByXPath("//channel");
       setValues(channel, json);
     }
-    /**/
+    /* If something goes wrong */
     catch (Exception e) {
+      System.out.println("There was an error requesting or parsing XML for " +
+        json.get("collectionId"));
       setValues(null, null);
     }
   }
@@ -101,19 +104,17 @@ public class PodcastResult extends Result {
       List<DomElement> items = (List<DomElement>) channel.getByXPath("./item");
       this.episodeResults = new PodcastEpisodeResult[items.size()];
       for (int i = 0; i < items.size(); i++) {
-        this.episodeResults[i] = new PodcastEpisodeResult(items.get(i),
-                                                          this.author,
-                                                          this.imageURL);
+        this.episodeResults[i] = new PodcastEpisodeResult(items.get(i), this.author, this.imageURL);
       }
     } else {
       this.episodeResults = new PodcastEpisodeResult[0];
     }
-
   }
 
   /**
    * Inner class describing a podcast episode itunes.result
    */
+  @JsonIgnoreProperties(value = {"json"})
   public static class PodcastEpisodeResult extends Result {
 
     /* Fields */
@@ -129,28 +130,40 @@ public class PodcastResult extends Result {
 
     /** Date formatter for episodes **/
     private static SimpleDateFormat dateFormatter =
-      new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZZ");
+      new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
 
     /**
      * PodcastEpisodeResult from item DomElement
      * @param item - DomElement
      */
-    public PodcastEpisodeResult (DomElement item, String author, String imageURL) {
+    public PodcastEpisodeResult(DomElement item, String author, String imageURL) {
       /* Non-date fields */
       this.title = XPathUtils.firstByName(item, "title");
       this.subtitle = XPathUtils.firstByName(item, "subtitle");
       this.summary = XPathUtils.firstByName(item, "summary");
       this.duration = XPathUtils.firstByName(item, "duration");
-      this.keywords = XPathUtils.firstByName(item, "keywords").split(",");
       this.audioURL = XPathUtils.firstByAttr(item, "enclosure/@url");
       this.author = author;
       this.imageURL = imageURL;
-      try {
-        this.pubDate = PodcastEpisodeResult.dateFormatter.parse(
-          XPathUtils.firstByName(item, "pubDate"));
-      } catch (ParseException e) {
-        this.pubDate = new Date();
+
+      /* Keyword / category acquisition */
+      String possKeywords = XPathUtils.firstByName(item, "keywords");
+      if (possKeywords.equals("")) {
+        this.keywords = XPathUtils.getAllByName(item, "category");
+      } else {
+        this.keywords = possKeywords.split(",");
       }
+
+      /* To make calls to date formats concurrency safe */
+      synchronized (PodcastEpisodeResult.class) {
+        try {
+          this.pubDate = PodcastEpisodeResult.dateFormatter.parse(
+            XPathUtils.firstByName(item, "pubDate"));
+        } catch (Exception e) {
+          this.pubDate = new Date();
+        }
+      }
+
     }
   }
 }
