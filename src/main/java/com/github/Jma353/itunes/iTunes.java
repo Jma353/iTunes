@@ -171,7 +171,7 @@ public class iTunes extends HTTP {
       bw = new BufferedWriter (fw);
       iTunes itunes = iTunes.getInstance();
       Result[] results = itunes.lookup(Arrays.asList(new String[] {"394775318", "206527655", "1076599250"}));
-      bw.write(results[0].toString());
+      bw.write(results[1].toString());
     } catch (IOException e) {
       e.printStackTrace();
     } finally {
