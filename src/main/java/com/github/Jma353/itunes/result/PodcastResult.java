@@ -73,8 +73,7 @@ public class PodcastResult extends Result {
     }
     /* If something goes wrong */
     catch (Exception e) {
-      System.out.println("There was an error requesting or parsing XML for " +
-        json.get("collectionId"));
+      // System.out.println("There was an error requesting or parsing XML for " + json.get("collectionId"));
       setValues(null, null);
     }
   }
