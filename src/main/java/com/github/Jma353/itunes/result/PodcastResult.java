@@ -75,6 +75,7 @@ public class PodcastResult extends Result {
     catch (Exception e) {
       System.out.println("There was an error requesting or parsing XML for " +
         json.get("collectionId"));
+      e.printStackTrace();
       setValues(null, null);
     }
   }
