@@ -25,8 +25,7 @@ Add the dependency
 </dependency>
 ```
 
-To see the current version, check [`here`](https://jitpack.io/#Jma353/iTunes)
-
+To see the current version, check [`here`](https://jitpack.io/#Jma353/iTunes) and click on `Commits` to see the latest commit number (or, alternatively, have the version number be set to `-SNAPSHOT`) 
 
 ## Usage
 
