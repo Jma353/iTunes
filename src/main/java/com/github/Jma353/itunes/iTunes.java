@@ -5,9 +5,6 @@ import com.github.Jma353.itunes.result.Result;
 import org.apache.http.client.utils.URIBuilder;
 import org.codehaus.jackson.JsonNode;
 import com.github.Jma353.itunes.result.ResultMarshaller;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -45,7 +42,7 @@ public class iTunes extends HTTP {
   /**
    * Protected constructor (only used in singleton logic)
    */
-  protected iTunes () {
+  protected iTunes() {
     this.baseURL = "https://itunes.apple.com";
     this.countryISOs =
       new HashSet<String> (Arrays.asList(Locale.getISOCountries()));
@@ -56,7 +53,7 @@ public class iTunes extends HTTP {
    * @return - URIBuilder
    * @throws URISyntaxException
    */
-  public URIBuilder searchURIBuilderBase () throws URISyntaxException {
+  private URIBuilder searchURIBuilderBase() throws URISyntaxException {
     return new URIBuilder(getBaseURL() + "/search");
   }
 
@@ -65,7 +62,7 @@ public class iTunes extends HTTP {
    * @return - URIBuilder
    * @throws URISyntaxException
    */
-  public URIBuilder lookupURIBuilderBase () throws URISyntaxException {
+  private URIBuilder lookupURIBuilderBase() throws URISyntaxException {
     return new URIBuilder(getBaseURL() + "/lookup");
   }
 
@@ -74,7 +71,7 @@ public class iTunes extends HTTP {
    * @param builder - URIBuilder
    * @return - URIBuilder
    */
-  public URIBuilder addLimit (URIBuilder builder, Integer limit) {
+  private URIBuilder addLimit(URIBuilder builder, Integer limit) {
     builder.addParameter("limit", limit.toString());
     return builder;
   }
@@ -85,7 +82,7 @@ public class iTunes extends HTTP {
    * @return - ISO String
    * @throws iTunesException - Custom exception
    */
-  public String soundISO (String iso) throws iTunesException {
+  public String soundISO(String iso) throws iTunesException {
     if (getCountryISOs().contains(iso)) {
       return iso;
     } else {
@@ -94,7 +91,7 @@ public class iTunes extends HTTP {
   }
 
   /** The God lookup function **/
-  public Result[] lookup (List<String> ids) {
+  public Result[] lookup(List<String> ids) {
     try {
       URIBuilder uriBuilder = lookupURIBuilderBase();
       StringBuilder builder = new StringBuilder();
@@ -159,31 +156,7 @@ public class iTunes extends HTTP {
 
   /* Necessary for JAR */
   public static void main (String [] args) {
-    // handTest();
   }
-
-  public static void handTest() {
-    BufferedWriter bw = null;
-    FileWriter fw = null;
-    try {
-      String currentDirectory = System.getProperty("user.dir");
-      fw = new FileWriter (currentDirectory + "/output.txt");
-      bw = new BufferedWriter (fw);
-      iTunes itunes = iTunes.getInstance();
-      Result[] results = itunes.lookup(Arrays.asList(new String[] {"394775318", "206527655", "1076599250"}));
-      bw.write(results[1].toString());
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        if (bw != null) bw.close();
-        if (fw != null) fw.close();
-      } catch (IOException ex) {
-        ex.printStackTrace();
-      }
-    }
-  }
-
 
 }
 

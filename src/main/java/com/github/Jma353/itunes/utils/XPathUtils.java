@@ -20,7 +20,7 @@ public class XPathUtils {
     }
     DomNode child = node.getFirstChild();
     if (child instanceof CharacterData) {
-      return ((CharacterData) child).getData();
+      return ((CharacterData) child).getData().trim();
     }
     return node.getTextContent().trim();
   }

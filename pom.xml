@@ -21,32 +21,37 @@
     </plugins>
   </build>
 
-
   <dependencies>
-    <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+    <!-- HTTP requesting -->
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>4.5.2</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/net.sourceforge.htmlunit/htmlunit -->
+    <!-- For XML parsing -->
     <dependency>
       <groupId>net.sourceforge.htmlunit</groupId>
       <artifactId>htmlunit</artifactId>
       <version>2.23</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl -->
+    <!-- JSONs -->
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
       <version>1.9.13</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok-maven/1.16.12.0 -->
+    <!-- Annotations that save my life -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.16.12</version>
       <scope>provided</scope>
+    </dependency>
+    <!-- Unit testing -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
     </dependency>
   </dependencies>
 

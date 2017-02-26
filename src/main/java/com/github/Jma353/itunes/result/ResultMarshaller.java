@@ -65,19 +65,25 @@ public class ResultMarshaller {
     int size = responseJSON.get("resultCount").getIntValue();
     Result[] results = new Result[size];
     Iterator<JsonNode> it = responseJSON.get("results").getElements();
+    JsonNode[] jsons = new JsonNode[size];
     IntHolder filled = new IntHolder(0);
-    int i = 0;
 
-    /* Dispatch threads */
+    /* Get elements */
+    int i = 0;
     while (it.hasNext()) {
-      new ResultThread(results, it.next(), i, filled, size).start();
+      jsons[i] = it.next();
       i++;
     }
 
+    /* Dispatch 10 threads */
+    for (i = 0; i < 10; i++) {
+      new ResultThread(results, jsons, i, filled).start();
+    }
+
     /* Wait on the filling of this data-structure + return */
-    synchronized (results) {
+    synchronized (filled) {
       while (filled.getI() < size) {
-        results.wait();
+        filled.wait();
       }
       return results;
     }

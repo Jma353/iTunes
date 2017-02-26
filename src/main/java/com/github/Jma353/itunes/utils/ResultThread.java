@@ -12,23 +12,20 @@ public class ResultThread extends Thread {
 
   /* Fields */
   private Result[] results;
-  private JsonNode json;
+  private JsonNode[] jsons;
   private int i;
   private IntHolder filled;
-  private int size;
 
   /** Thread with necessary references **/
   public ResultThread (Result[] results,
-                       JsonNode json,
+                       JsonNode[] jsons,
                        int i,
-                       IntHolder filled,
-                       int size) {
-    super ();
+                       IntHolder filled) {
+    super();
     this.results = results;
-    this.json = json;
+    this.jsons = jsons;
     this.i = i;
     this.filled = filled;
-    this.size = size;
   }
 
   /**
@@ -42,12 +39,12 @@ public class ResultThread extends Thread {
    */
   public void run () {
     while (i < results.length) {
-      results[i] = ResultMarshaller.marshall(json);
+      results[i] = ResultMarshaller.marshall(jsons[i]);
       /* If we're done */
-      synchronized (results) {
+      synchronized (filled) {
         filled.increment();
-        if (filled.getI() == size) {
-          results.notify();
+        if (filled.getI() == results.length) {
+          filled.notify();
         }
       }
       i += 10;
