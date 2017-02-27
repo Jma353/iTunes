@@ -70,7 +70,7 @@ public class HTTP {
     srcConn.setRequestProperty("User-Agent", userAgentValue);
     BufferedReader reader;
     BufferedReader in =
-      new BufferedReader(new InputStreamReader(srcConn.getInputStream(), "UTF-8"));
+      new BufferedReader(new InputStreamReader(srcConn.getInputStream(), "utf8"));
     return in;
   }
 

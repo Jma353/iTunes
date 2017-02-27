@@ -69,7 +69,7 @@ public class PodcastResult extends Result {
       /* Instantiate */
       setValues(feed, json);
     } catch (Exception e) {
-
+      setFailValues();
     }
   }
 
@@ -103,10 +103,17 @@ public class PodcastResult extends Result {
       }
 
     } catch (Exception e) {
-      e.printStackTrace();
-      this.id = -1L;
-      this.episodeResults = new PodcastEpisodeResult[0];
+      setFailValues();
     }
+  }
+
+  /**
+   * On failure, set these values to flag failure
+   */
+  public void setFailValues() {
+    this.id = -1L;
+    this.episodeResults = new PodcastEpisodeResult[0];
+    this.genres = new String[0];
   }
 
   /**

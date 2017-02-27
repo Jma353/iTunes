@@ -63,4 +63,13 @@ public class Tests {
     }
   }
 
+  @Test
+  public void test7() {
+    iTunes itunes = iTunes.getInstance();
+    Result[] results = itunes.lookup(Arrays.asList(new String[] { "117488860" }));
+    for (Result r : results) {
+      System.out.println(r);
+    }
+  }
+
 }
