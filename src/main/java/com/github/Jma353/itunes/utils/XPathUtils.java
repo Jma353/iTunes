@@ -1,9 +1,6 @@
 package com.github.Jma353.itunes.utils;
 
-import com.gargoylesoftware.htmlunit.html.DomAttr;
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.DomNamespaceNode;
-import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.*;
 import org.w3c.dom.CharacterData;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +15,16 @@ public class XPathUtils {
     if (node == null) { // Avoids null exceptions
       return "";
     }
-    DomNode child = node.getFirstChild();
-    if (child instanceof CharacterData) {
-      return ((CharacterData) child).getData().trim();
+    DomNodeList<DomNode> children = node.getChildNodes();
+    for (DomNode item : children) {
+      if (item instanceof CharacterData) {
+        CharacterData child = (CharacterData) item;
+        String data = child.getData();
+        if (data != null && data.trim().length() > 0) {
+          return child.getData().trim()
+            .replaceAll("(<!)*(\\[)*CDATA\\[*", "").replaceAll("(\\])+>*", "");
+        }
+      }
     }
     return node.getTextContent().trim();
   }

@@ -27,6 +27,13 @@ public class Tests {
     }
   }
 
-
+  @Test
+  public void test3() { // Ensure CDATA extracted
+    iTunes itunes = iTunes.getInstance();
+    Result[] results = itunes.lookup(Arrays.asList(new String[] { "313417425" }));
+    for(Result r : results) {
+      System.out.println(r);
+    }
+  }
 
 }
