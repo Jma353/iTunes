@@ -28,11 +28,11 @@
       <artifactId>httpclient</artifactId>
       <version>4.5.2</version>
     </dependency>
-    <!-- For XML parsing -->
+    <!-- RSS feed gathering -->
     <dependency>
-      <groupId>net.sourceforge.htmlunit</groupId>
-      <artifactId>htmlunit</artifactId>
-      <version>2.23</version>
+      <groupId>com.rometools</groupId>
+      <artifactId>rome</artifactId>
+      <version>1.7.1</version>
     </dependency>
     <!-- JSONs -->
     <dependency>

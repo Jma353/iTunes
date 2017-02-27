@@ -1,23 +1,21 @@
 package com.github.Jma353.itunes.result;
 
-import com.gargoylesoftware.htmlunit.StringWebResponse;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.HTMLParser;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.github.Jma353.itunes.HTTP;
+import com.rometools.rome.feed.synd.SyndCategory;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.SyndFeedInput;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.codehaus.jackson.JsonNode;
-import com.github.Jma353.itunes.utils.XPathUtils;
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import lombok.Getter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.jdom2.Element;
 
 /**
  * itunes.iTunes podcast itunes.result
@@ -26,91 +24,85 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public class PodcastResult extends Result {
 
   /* Fields */
-  @Getter private Long id;
-  @Getter private String title;
-  @Getter private String country;
-  @Getter private String author;
-  @Getter private String description;
-  @Getter private String imageURL;
-  @Getter private String feedURL;
-  @Getter private String[] genres;
-  @Getter private PodcastEpisodeResult[] episodeResults;
+  @Getter
+  private Long id;
+  @Getter
+  private String title;
+  @Getter
+  private String country;
+  @Getter
+  private String author;
+  @Getter
+  private String description;
+  @Getter
+  private String imageURL;
+  @Getter
+  private String feedURL;
+  @Getter
+  private String[] genres;
+  @Getter
+  private PodcastEpisodeResult[] episodeResults;
 
   /**
    * PodcastResult from JsonNode
+   *
    * @param json - JsonNode
    */
-  public PodcastResult (JsonNode json) {
+  public PodcastResult(JsonNode json) {
     this.json = json;
+
+    /* Prepare to get RSS */
+    SyndFeedInput input = new SyndFeedInput();
+    SyndFeed feed = null;
+    String dataSource = json.get("feedUrl").getTextValue();
+
     try {
+      /* Stream RSS feed */
+      CloseableHttpClient httpClient = HttpClients.createDefault();
+      BufferedReader reader = HTTP.getResponseRSS(httpClient, dataSource);
+      feed = input.build(reader);
 
-      /* Setup stream */
-      URL src = new URL(json.get("feedUrl").getTextValue());
-      URLConnection srcConn = src.openConnection();
-      srcConn.setRequestProperty("User-Agent", "Mozilla/5.0 " +
-        "(Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-      BufferedReader in =
-        new BufferedReader(new InputStreamReader(srcConn.getInputStream(), "UTF-8"));
+      /* Close stuff */
+      reader.close();
+      httpClient.close();
 
-      /* Build String from stream */
-      String inputLine;
-      StringBuilder builder = new StringBuilder();
-      while ((inputLine = in.readLine()) != null)
-        builder.append(inputLine);
-      in.close();
-      String xString = builder.toString();
-
-      /* Clean + process String */
-      xString = xString.replaceAll("[^\\x20-\\x7e\\x0A]", "");
-      StringWebResponse response = new StringWebResponse(xString, src);
-
-      /* Prepare web client */
-      WebClient client = new WebClient();
-      client.getOptions().setCssEnabled(false);
-      client.getOptions().setJavaScriptEnabled(false);
-
-      /* Get HTML page + grab values */
-      HtmlPage page = HTMLParser.parseHtml(response, client.getCurrentWindow());
-      DomElement channel = (DomElement) page.getFirstByXPath("//channel");
-      setValues(channel, json);
-    }
-    /* If something goes wrong */
-    catch (Exception e) {
-      // System.out.println("There was an error requesting or parsing XML for " + json.get("collectionId"));
-      setValues(null, null);
+      /* Instantiate */
+      setValues(feed, json);
+    } catch (Exception e) {
+      
     }
   }
 
   /**
    * Bulk-set values
-   * @param channel - DomElement
+   *
+   * @param feed - SyndFeed
    */
-  public void setValues (DomElement channel, JsonNode json) {
-
+  public void setValues(SyndFeed feed, JsonNode json) {
+    try {
     /* Fill all fields */
-    this.id = json != null ? json.get("collectionId").asLong() : -1;
-    this.title = channel != null ? XPathUtils.firstByName(channel, "title") : "";
-    this.country = json != null ? json.get("country").asText() : "";
-    this.author = channel != null ? XPathUtils.firstByName(channel, "author") : "";
-    this.description = channel != null ? XPathUtils.firstByName(channel, "description") : "";
-    this.imageURL = channel != null ? XPathUtils.firstByAttr(channel, "image/@href") : "";
-    this.feedURL = json != null ? json.get("feedUrl").getTextValue() : "";
-    ArrayList<String> genres = new ArrayList<String>();
-    if (json != null) {
+      this.id = json.get("collectionId").asLong();
+      this.title = json.get("collectionName").getTextValue();
+      this.country = json.get("country").getTextValue();
+      this.author = json.get("artistName").getTextValue();
+      this.imageURL = json.get("artworkUrl60").getTextValue();
+      this.feedURL = json.get("feedUrl").getTextValue();
+      this.description = feed.getDescription();
+      ArrayList<String> genres = new ArrayList<String>();
       Iterator<JsonNode> it = json.get("genres").iterator();
-      while (it.hasNext()) { genres.add(it.next().asText()); }
-    }
-    this.genres = genres.toArray(new String[genres.size()]);
+      while (it.hasNext()) {
+        genres.add(it.next().asText());
+        this.genres = genres.toArray(new String[genres.size()]);
 
-    /* Episode children */
-    if (channel != null) {
-      List<DomElement> items = (List<DomElement>) channel.getByXPath("./item");
-      this.episodeResults = new PodcastEpisodeResult[items.size()];
-      for (int i = 0; i < items.size(); i++) {
-        this.episodeResults[i] = new PodcastEpisodeResult(items.get(i), this.author, this.imageURL);
       }
-    } else {
-      this.episodeResults = new PodcastEpisodeResult[0];
+
+      List<SyndEntry> entries = feed.getEntries();
+      this.episodeResults = new PodcastEpisodeResult[entries.size()];
+      for (int i = 0; i < entries.size(); i++) {
+        this.episodeResults[i] = new PodcastEpisodeResult(entries.get(i));
+      }
+    } catch (Exception e) {
+      this.id = -1L;
     }
   }
 
@@ -121,52 +113,54 @@ public class PodcastResult extends Result {
   public static class PodcastEpisodeResult extends Result {
 
     /* Fields */
-    @Getter private String title;
-    @Getter private String author;
-    @Getter private String subtitle;
-    @Getter private String summary;
-    @Getter private String imageURL;
-    @Getter private String duration;
-    @Getter private String[] keywords;
-    @Getter private String audioURL;
-    @Getter private Date pubDate;
-
-    /** Date formatter for episodes **/
-    private static SimpleDateFormat dateFormatter =
-      new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+    @Getter
+    private String title;
+    @Getter
+    private String author;
+    @Getter
+    private String summary;
+    @Getter
+    private String audioURL;
+    @Getter
+    private String imageURL;
+    @Getter
+    private String duration;
+    @Getter
+    private String[] keywords;
+    @Getter
+    private Date pubDate;
 
     /**
      * PodcastEpisodeResult from item DomElement
      * @param item - DomElement
      */
-    public PodcastEpisodeResult(DomElement item, String author, String imageURL) {
+    public PodcastEpisodeResult(SyndEntry item) {
       /* Non-date fields */
-      this.title = XPathUtils.firstByName(item, "title");
-      this.subtitle = XPathUtils.firstByName(item, "subtitle");
-      this.summary = XPathUtils.firstByName(item, "summary");
-      this.duration = XPathUtils.firstByName(item, "duration");
-      this.audioURL = XPathUtils.firstByAttr(item, "enclosure/@url");
-      this.author = author;
-      this.imageURL = imageURL;
+      this.title = item.getTitle();
+      this.summary = item.getDescription().getValue();
+      this.pubDate = item.getPublishedDate();
+      this.author = item.getAuthor();
+      this.audioURL = item.getEnclosures().get(0).getUrl();
+      this.imageURL = item.getUri();
 
-      /* Keyword / category acquisition */
-      String possKeywords = XPathUtils.firstByName(item, "keywords");
-      if (possKeywords.equals("")) {
-        this.keywords = XPathUtils.getAllByName(item, "category");
-      } else {
-        this.keywords = possKeywords.split(",");
+      // Keywords
+      List<SyndCategory> categories = item.getCategories();
+      String[] kws = new String[categories.size()];
+      for (int i = 0; i < categories.size(); i++) {
+        kws[i] = categories.get(i).getName();
       }
+      this.keywords = kws;
 
-      /* To make calls to date formats concurrency safe */
-      synchronized (PodcastEpisodeResult.class) {
-        try {
-          this.pubDate = PodcastEpisodeResult.dateFormatter.parse(
-            XPathUtils.firstByName(item, "pubDate"));
-        } catch (Exception e) {
-          this.pubDate = new Date();
+      // Duration
+      List<Element> markup = item.getForeignMarkup();
+      for(Element e : markup) {
+        if(e.getName().contains("duration")) {
+          this.duration = e.getValue();
         }
       }
 
     }
   }
+
 }
+

@@ -1,8 +1,11 @@
 package com.github.Jma353.itunes;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -14,17 +17,22 @@ import java.net.URI;
 /**
  * Abstract class defining itunes.HTTP methods
  */
-public abstract class HTTP {
+public class HTTP {
+
+  private static String userAgentValue = "Mozilla/5.0 " +
+    "(Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2";
 
   /**
    * Send a simple GET request
    * @param uri - URI
+   * @throws IOException - Networking I/O issue
    */
-  protected JsonNode get (URI uri) throws IOException {
+  public static JsonNode get(URI uri) throws IOException {
 
     /* Client & request setup */
     HttpClient client = HttpClientBuilder.create().build();
     HttpGet request = new HttpGet(uri.toString());
+    request.addHeader("User-Agent", userAgentValue);
 
     /* Make the request */
     HttpResponse response = client.execute(request);
@@ -44,5 +52,28 @@ public abstract class HTTP {
     ObjectMapper mapper = new ObjectMapper();
     return mapper.readTree(result.toString());
   }
+
+  /**
+   * Stream RSS feed
+   * @param httpClient - CloseableHttpClient
+   * @param dataSource - URL in String form
+   * @return - BufferedReader
+   * @throws IOException - Networking I/O issue
+   */
+  public static BufferedReader getResponseRSS(CloseableHttpClient httpClient,
+                                              String dataSource) throws IOException {
+    HttpGet httpGet = new HttpGet(dataSource);
+    httpGet.addHeader("User-Agent", userAgentValue);
+    CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+    BufferedReader reader;
+
+    if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+      reader = new BufferedReader(new InputStreamReader(httpResponse.getEntity().getContent()));
+    } else {
+      reader = null;
+    }
+    return reader;
+  }
+
 
 }

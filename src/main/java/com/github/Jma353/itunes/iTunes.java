@@ -17,7 +17,7 @@ import lombok.Getter;
  * Main class to handle making API Requests.
  * In the form of a singleton.
  */
-public class iTunes extends HTTP {
+public class iTunes {
 
   /* Exception specific to itunes.iTunes driver */
   public class iTunesException extends Exception {
@@ -100,7 +100,7 @@ public class iTunes extends HTTP {
         builder.append(addition);
       }
       uriBuilder.addParameter("id", builder.toString());
-      JsonNode result = get(uriBuilder.build());
+      JsonNode result = HTTP.get(uriBuilder.build());
       return ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
       e.printStackTrace();
@@ -116,7 +116,7 @@ public class iTunes extends HTTP {
       if (iso != null) { uriBuilder.addParameter("country", soundISO(iso)); }
       if (m != null) { uriBuilder = m.uriBuilder(uriBuilder); }
       if (limit != null) { uriBuilder = addLimit(uriBuilder, limit); }
-      JsonNode result = get(uriBuilder.build());
+      JsonNode result = HTTP.get(uriBuilder.build());
       return ResultMarshaller.marshallAll(result);
     } catch (Exception e) {
       e.printStackTrace();

@@ -21,7 +21,7 @@ public class Tests {
   @Test
   public void test2() {
     iTunes itunes = iTunes.getInstance();
-    Result[] results = itunes.search("serial", new Podcast(Podcast.Entity.podcast), 40);
+    Result[] results = itunes.search("serial", new Podcast(Podcast.Entity.podcast), 20);
     for(Result r : results) {
       System.out.println(r);
     }
@@ -32,6 +32,24 @@ public class Tests {
     iTunes itunes = iTunes.getInstance();
     Result[] results = itunes.lookup(Arrays.asList(new String[] { "313417425" }));
     for(Result r : results) {
+      System.out.println(r);
+    }
+  }
+
+  @Test
+  public void test4() { // Test incomplete series data
+    iTunes itunes = iTunes.getInstance();
+    Result[] results = itunes.lookup(Arrays.asList(new String[] { "1033688462" }));
+    for(Result r : results) {
+      System.out.println(r);
+    }
+  }
+
+  @Test
+  public void test5() {
+    iTunes itunes = iTunes.getInstance();
+    Result[] results = itunes.lookup(Arrays.asList(new String[] { "811377230" }));
+    for (Result r : results) {
       System.out.println(r);
     }
   }
