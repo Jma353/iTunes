@@ -69,7 +69,7 @@ public class PodcastResult extends Result {
       /* Instantiate */
       setValues(feed, json);
     } catch (Exception e) {
-      
+
     }
   }
 
@@ -101,7 +101,9 @@ public class PodcastResult extends Result {
       for (int i = 0; i < entries.size(); i++) {
         this.episodeResults[i] = new PodcastEpisodeResult(entries.get(i));
       }
+
     } catch (Exception e) {
+      e.printStackTrace();
       this.id = -1L;
     }
   }
@@ -140,7 +142,7 @@ public class PodcastResult extends Result {
       this.summary = item.getDescription().getValue();
       this.pubDate = item.getPublishedDate();
       this.author = item.getAuthor();
-      this.audioURL = item.getEnclosures().get(0).getUrl();
+      this.audioURL = item.getEnclosures().size() > 0 ? item.getEnclosures().get(0).getUrl() : "";
       this.imageURL = item.getUri();
 
       // Keywords
