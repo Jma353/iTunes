@@ -105,6 +105,7 @@ public class PodcastResult extends Result {
     } catch (Exception e) {
       e.printStackTrace();
       this.id = -1L;
+      this.episodeResults = new PodcastEpisodeResult[0];
     }
   }
 
@@ -139,7 +140,7 @@ public class PodcastResult extends Result {
     public PodcastEpisodeResult(SyndEntry item) {
       /* Non-date fields */
       this.title = item.getTitle();
-      this.summary = item.getDescription().getValue();
+      this.summary = item.getDescription() != null ? item.getDescription().getValue() : "";
       this.pubDate = item.getPublishedDate();
       this.author = item.getAuthor();
       this.audioURL = item.getEnclosures().size() > 0 ? item.getEnclosures().get(0).getUrl() : "";
