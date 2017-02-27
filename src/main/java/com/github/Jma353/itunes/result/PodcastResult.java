@@ -32,6 +32,7 @@ public class PodcastResult extends Result {
   @Getter private String author;
   @Getter private String description;
   @Getter private String imageURL;
+  @Getter private String feedURL;
   @Getter private String[] genres;
   @Getter private PodcastEpisodeResult[] episodeResults;
 
@@ -93,6 +94,7 @@ public class PodcastResult extends Result {
     this.author = channel != null ? XPathUtils.firstByName(channel, "author") : "";
     this.description = channel != null ? XPathUtils.firstByName(channel, "description") : "";
     this.imageURL = channel != null ? XPathUtils.firstByAttr(channel, "image/@href") : "";
+    this.feedURL = json != null ? json.get("feedUrl").getTextValue() : "";
     ArrayList<String> genres = new ArrayList<String>();
     if (json != null) {
       Iterator<JsonNode> it = json.get("genres").iterator();
